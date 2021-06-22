@@ -1,7 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.models.DriverModel;
-import com.example.demo.models.UsuarioModel;
+
 import com.example.demo.repositories.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
