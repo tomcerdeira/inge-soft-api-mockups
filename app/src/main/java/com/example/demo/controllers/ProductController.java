@@ -20,7 +20,7 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ProductModel guardarUsuario(@RequestBody ProductModel producto){
+    public ProductModel guardarProducto(@RequestBody ProductModel producto){
         return this.productService.guardarProducto(producto);
     }
 

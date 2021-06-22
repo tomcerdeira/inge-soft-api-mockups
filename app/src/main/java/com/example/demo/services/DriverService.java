@@ -35,4 +35,17 @@ public class DriverService {
         }
     }
 
+    public ArrayList<DriverModel> obtenerConductoresLibres(){
+        ArrayList<DriverModel> drivers = obtenerDrivers();
+        ArrayList<DriverModel> aux = new ArrayList<>();
+
+        for(DriverModel driver:drivers){
+            if(driver.isAvailable()){
+                aux.add(driver);
+            }
+        }
+        return aux;
+    }
+
+
 }

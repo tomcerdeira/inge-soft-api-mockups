@@ -11,6 +11,10 @@ public class DriverModel {
     private Long id;
     @Column(unique = false, nullable = false)
     private String nombre;
+    @Column(unique = false, nullable = false)
+    private Long product_id;
+
+    private boolean isAvailable = true;
 
     private String apellido;
     @Column(unique = false, nullable = false)
@@ -28,6 +32,23 @@ public class DriverModel {
     private Double longitude=(double)0;
     // private Integer tarjetaId
 
+
+
+    public Long getProduct_id() {
+        return product_id;
+    }
+
+    public void setProduct_id(Long product_id) {
+        this.product_id = product_id;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
 
     public Long getId() {
         return id;
