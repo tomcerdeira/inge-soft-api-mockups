@@ -36,11 +36,10 @@ public class ProductModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long id;
+    private Long product_id;
 
     private boolean upfront_fare_enabled;
     private Integer capacity;
-    private Long product_id;
 
     //private PriceDetailsModel price_details; //Deberia ser con esto, pero no podemos unir las tablas
     private Integer service_fee;
@@ -60,13 +59,7 @@ public class ProductModel {
     private String product_group;
     private String description;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public boolean isUpfront_fare_enabled() {
         return upfront_fare_enabled;
