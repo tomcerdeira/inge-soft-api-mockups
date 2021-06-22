@@ -1,9 +1,13 @@
 package com.example.demo.models;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "usuario", uniqueConstraints = {
+                        @UniqueConstraint(name = "uk_user_email",columnNames = {"email"}),
+                        @UniqueConstraint(name = "uk_user_telefono", columnNames = {"telefono"})
+                        })
 public class UsuarioModel {
 
     @Id
@@ -12,15 +16,44 @@ public class UsuarioModel {
     private Long id;
 
     private String nombre;
+    private String apellido;
+    @Column(name = "email")
     private String email;
-    private Integer prioridad;
+    @Column(name = "telefono")
+    private Integer telefono;
+    private String contrasena;
+    private String ciudad;
 
-    public void setPrioridad(Integer prioridad){
-        this.prioridad = prioridad;
+    public String getApellido() {
+        return apellido;
     }
 
-    public Integer getPrioridad(){
-        return prioridad;
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public Integer getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(Integer telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
     }
 
     public Long getId() {

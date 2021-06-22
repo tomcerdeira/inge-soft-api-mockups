@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UsuarioRepository extends CrudRepository<UsuarioModel, Long> {
-    public abstract ArrayList<UsuarioModel> findByPrioridad(Integer prioridad);
+    public abstract UsuarioModel findByTelefono(Integer telefono);
 
 }
