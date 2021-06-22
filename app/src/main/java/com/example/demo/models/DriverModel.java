@@ -30,9 +30,6 @@ public class DriverModel {
     private Double latitude= (double)0;
     @Column(columnDefinition = "Integer default 0")
     private Double longitude=(double)0;
-    // private Integer tarjetaId
-
-
 
     public Long getProduct_id() {
         return product_id;

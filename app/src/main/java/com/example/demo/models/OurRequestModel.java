@@ -31,22 +31,6 @@ public class OurRequestModel {
     public void setId(Long id) {
         this.id = id;
     }
-//
-//    public List<DriverModel> getDriverAvailables() {
-//        this.driverAvailables =  driverService.obtenerConductoresLibres();
-//        List<DriverModel> aux = new ArrayList<>();
-//        Double dist= 0.0;
-//        for(DriverModel d:driverAvailables){
-//            dist = Math.sqrt((latitudeInit-d.getLatitude())*(latitudeInit-d.getLatitude()) + (longitudeInit-d.getLongitude())*(longitudeInit-d.getLatitude()));
-//            if(dist > 1) // todo verificar que sea un radio de n metros
-//            {
-//                aux.add(d);
-//            }
-//        }
-//
-//        driverAvailables = aux;
-//        return  driverAvailables;
-//    }
 
     public double getLatitudeInit() {
         return latitudeInit;

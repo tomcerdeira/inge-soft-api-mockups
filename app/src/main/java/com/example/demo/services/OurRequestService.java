@@ -42,7 +42,41 @@ public class OurRequestService {
                 }
 
         }
-        return  aux;
+        return aux;
+    }
+
+    public double getPriceEstimate(Long driverID, Double latitudeInit,Double longitudeInit,Double latitudeDest,Double longitudeDest){
+        double totalTripCost = 0.0;
+        Optional<DriverModel> driver = driverService.obtenerDriverPorId(driverID);
+        if (driver.isPresent()){
+            Optional<ProductModel> product = productService.obtenerPorId(driver.get().getProduct_id());
+            if (product.isPresent()){
+                Double dist = calculateDistanceInMeters(latitudeInit,longitudeInit,latitudeDest,longitudeDest);
+                totalTripCost += product.get().getService_fee();
+                //TODO: ver si agregamos el costPerMinute
+                totalTripCost += dist*product.get().getCost_per_distance();
+                System.out.println("Distancia: " + dist +  " Precio: " + totalTripCost);
+            }
+        }
+        return totalTripCost;
+    }
+
+    public long getTimeOfPickUpEstimate(Long driverID, Double latitudeInit,Double longitudeInit){
+        long timeEstimate = 0;
+        Optional<DriverModel> driver = driverService.obtenerDriverPorId(driverID);
+        if (driver.isPresent()){
+            Double dist = calculateDistanceInMeters(latitudeInit,longitudeInit,driver.get().getLatitude(),driver.get().getLongitude());
+            timeEstimate += (dist/100)*60000;
+        }
+        return timeEstimate;
+    }
+
+    public long getTimeOfArrivalEstimate(Long driverID, Double latitudeInit,Double longitudeInit,Double latitudeDest,Double longitudeDest){
+        long timeEstimate = 0;
+        timeEstimate += getTimeOfPickUpEstimate(driverID, latitudeInit, longitudeInit);
+        Double dist = calculateDistanceInMeters(latitudeInit,longitudeInit,latitudeDest,longitudeDest);
+        timeEstimate += (dist/100)*60000;
+        return timeEstimate;
     }
 
     public double calculateDistanceInMeters(double lat1, double long1, double lat2,

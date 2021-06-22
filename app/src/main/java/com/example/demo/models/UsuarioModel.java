@@ -1,7 +1,6 @@
 package com.example.demo.models;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 
 @Entity
 @Table(name = "usuario", uniqueConstraints = {
@@ -22,7 +21,6 @@ public class UsuarioModel {
     @Column(name = "telefono")
     private Integer telefono;
     private String contrasena;
-    private String ciudad;
 
     public String getApellido() {
         return apellido;
@@ -46,14 +44,6 @@ public class UsuarioModel {
 
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
-    }
-
-    public String getCiudad() {
-        return ciudad;
-    }
-
-    public void setCiudad(String ciudad) {
-        this.ciudad = ciudad;
     }
 
     public Long getId() {

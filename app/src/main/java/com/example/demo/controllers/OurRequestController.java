@@ -16,11 +16,24 @@ public class OurRequestController {
     @Autowired
     OurRequestService requestService;
 
-    @GetMapping("/query")
+    @GetMapping("/avaliableDrivers")
     public List<DriverModel> availableDriver(@RequestParam("latitudeInit") Double latitudeInit,@RequestParam("longitudeInit") Double longitudeInit,@RequestParam("latitudeDest") Double latitudeDest,@RequestParam("longitudeDest") Double longitudeDest){ //
         return requestService.getAvailablesDrivers(latitudeInit,longitudeInit,latitudeDest,longitudeDest);
     }
 
-    
+    @GetMapping("/estimatePrice")
+    public double getPriceEstimateOfDriverId(@RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit,@RequestParam("longitudeInit") Double longitudeInit,@RequestParam("latitudeDest") Double latitudeDest,@RequestParam("longitudeDest") Double longitudeDest){ //
+        return requestService.getPriceEstimate(driverId, latitudeInit,longitudeInit,latitudeDest,longitudeDest);
+    }
+
+    @GetMapping("/estimatePickUp")
+    public long getTimeEstimateOfPickUpOfDriverId(@RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit,@RequestParam("longitudeInit") Double longitudeInit){ //
+        return requestService.getTimeOfPickUpEstimate(driverId, latitudeInit,longitudeInit);
+    }
+
+    @GetMapping("/estimateArrival")
+    public long getTimeEstimateOfArrivalOfDriverId(@RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit,@RequestParam("longitudeInit") Double longitudeInit,@RequestParam("latitudeDest") Double latitudeDest,@RequestParam("longitudeDest") Double longitudeDest){ //
+        return requestService.getTimeOfArrivalEstimate(driverId, latitudeInit,longitudeInit,latitudeDest,longitudeDest);
+    }
 
 }
