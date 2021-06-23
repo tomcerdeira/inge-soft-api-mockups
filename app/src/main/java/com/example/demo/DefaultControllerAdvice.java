@@ -36,4 +36,10 @@ public class DefaultControllerAdvice{
         return new ResponseEntity<>(apiError,apiError.getHttpStatus());
     }
 
+    @ExceptionHandler(UnauthorizedMethodException.class)
+    protected ResponseEntity<Object> handleUnauthorizeMethod(InvalidIdException ex){
+        RestApiError apiError = new RestApiError(HttpStatus.UNAUTHORIZED,"Error: No se puede invocar este metodo", ex.getMessage());
+        return new ResponseEntity<>(apiError,apiError.getHttpStatus());
+    }
+
 }

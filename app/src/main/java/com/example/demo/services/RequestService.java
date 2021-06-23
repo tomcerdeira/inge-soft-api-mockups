@@ -25,6 +25,8 @@ public class RequestService {
 
     public RequestModel guardarRequest(RequestModel requestModel){return  requestRepository.save(requestModel);}
 
+    public void borrarPorId(Long id){requestRepository.deleteById(id);}
+
 
 
 }

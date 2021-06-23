@@ -8,6 +8,7 @@ import com.example.demo.services.OurRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -40,6 +41,12 @@ public class OurRequestController {
     @PostMapping("/ride")
     public RequestModel setNewRide(@RequestParam("userId") Long userId, @RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit, @RequestParam("longitudeInit") Double longitudeInit, @RequestParam("latitudeDest") Double latitudeDest, @RequestParam("longitudeDest") Double longitudeDest){
         return requestService.setNewDrive(userId,driverId,latitudeInit,longitudeInit,latitudeDest,longitudeDest);
+    }
+
+    @PostMapping("{ride_id}/{user_id}/cancel_ride")
+    public void cancelRide(@PathVariable("user_id") Long user_id,@PathVariable("ride_id") Long ride_id){
+        System.out.println("LLEGO A CANCEL"+ride_id+user_id);
+        requestService.cancelRide(user_id,ride_id);
     }
 
 }

@@ -1,12 +1,11 @@
 package com.example.demo.services;
 
-import com.example.demo.InvalidIdException;
-import com.example.demo.RequestStatus;
-import com.example.demo.UnavailableDriverException;
+import com.example.demo.*;
 import com.example.demo.models.*;
 import com.example.demo.repositories.DriverRepository;
 import com.example.demo.repositories.OurRequestRepository;
 import com.example.demo.repositories.RequestRepository;
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -79,6 +78,7 @@ public class OurRequestService {
                 botDriverProduct.setCurrency_code("ARS");
                 botDriverProduct.setCash_enabled(true);
                 botDriverProduct.setShared(false);
+                botDriver.setNombre("Bot Driver "+botDriver.getId());
                 botDriverProduct.setShort_description("Bot Driver "+botDriver.getId());
                 botDriverProduct.setDisplay_name("Bot Driver "+botDriver.getId());
                 botDriverProduct.setDescription("Bot Driver "+botDriver.getId());
@@ -162,6 +162,31 @@ public class OurRequestService {
                 throw new UnavailableDriverException("Conductor con ID: " + driverId + " no se encuentra disponible");
             }
         return requestModel;
+    }
+
+    public void cancelRide(Long userId,Long id){
+        RequestModel  requestModel = requestService.obtenerRequestPorId(id);
+
+        if(requestModel.getStatus().equals(RequestStatus.WAITING_FOR_PICK_UP.toString())){
+            DriverModel driverModel = driverService.obtenerDriverPorId(requestModel.getDriver_id());
+            ProductModel productModel = productService.obtenerPorId(driverModel.getProduct_id());
+            UsuarioModel usuarioModel = userService.obtenerPorId(userId);
+            if(usuarioModel.getCurrentTripId() != id){
+                throw new UnauthorizedMethodException("No puede cancelar el viaje que no es suyo");
+            }
+            double currentSaldo = usuarioModel.getCurrentSaldo();
+            usuarioModel.setCurrentSaldo(currentSaldo+productModel.getCancellation_fee());
+            usuarioModel.setCurrentTripId(null);
+            driverModel.setCurrentTripId(null);
+            driverModel.setAvailable(true);
+
+            userService.guardarUsuario(usuarioModel);
+            driverService.guardarDriver(driverModel);
+            requestService.borrarPorId(id);
+        }else{
+            throw new UnauthorizedMethodException("No puede cancelar el viaje a menos que este espando para ser recogido");
+        }
+
     }
 
 }
