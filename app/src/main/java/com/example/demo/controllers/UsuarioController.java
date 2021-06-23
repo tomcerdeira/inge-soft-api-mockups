@@ -26,6 +26,11 @@ public class UsuarioController {
         return this.usuarioService.guardarUsuario(usuario);
     }
 
+    @PostMapping("/pay/{usr_id}")
+    public double pagarSaldo(@PathVariable("usr_id") Long usr_id,@RequestBody Double toPay){
+        return this.usuarioService.pagarSaldo(usr_id,toPay);
+    }
+
     @GetMapping( path = "/{id}")
     public Optional<UsuarioModel> obtenerUsuarioPorId(@PathVariable("id") Long id) {
         return this.usuarioService.obtenerPorId(id);

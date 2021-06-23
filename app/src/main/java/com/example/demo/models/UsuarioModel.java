@@ -21,6 +21,7 @@ public class UsuarioModel {
     @Column(name = "telefono")
     private Integer telefono;
     private String contrasena;
+    private double currentSaldo=0;
 
     public String getApellido() {
         return apellido;
@@ -64,6 +65,14 @@ public class UsuarioModel {
 
     public String getEmail() {
         return email;
+    }
+
+    public double getCurrentSaldo() {
+        return currentSaldo;
+    }
+
+    public void setCurrentSaldo(double currentSaldo) {
+        this.currentSaldo = currentSaldo;
     }
 
     public void setEmail(String email) {

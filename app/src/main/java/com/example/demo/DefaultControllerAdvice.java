@@ -16,11 +16,17 @@ public class DefaultControllerAdvice{
 
 
     @ExceptionHandler(ConstraintValueException.class)
-    protected ResponseEntity<Object> handleEntityNotFound(ConstraintValueException ex, HttpServletRequest request) {
+    protected ResponseEntity<Object> handleDataConstaint(ConstraintValueException ex, HttpServletRequest request) {
 //        log.debug("A REST API error occurred during web call [{}:{}].", request.getMethod(), request.getRequestURI() ,ex);
         RestApiError apiError = new RestApiError(HttpStatus.NOT_ACCEPTABLE,
                 "ERROR: duplicate key value violates unique constraint",
                 ex.getMessage());
         return new ResponseEntity<>(apiError, apiError.getHttpStatus());
+    }
+
+    @ExceptionHandler(InvalidIdException.class)
+    protected ResponseEntity<Object> handleDataNotFound(InvalidIdException ex){
+        RestApiError apiError = new RestApiError(HttpStatus.NOT_FOUND,"ERROR: invalid id",ex.getMessage());
+        return new ResponseEntity<>(apiError,apiError.getHttpStatus());
     }
 }
