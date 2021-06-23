@@ -22,6 +22,15 @@ public class UsuarioModel {
     private Integer telefono;
     private String contrasena;
     private double currentSaldo=0;
+    private Long currentTripId;
+
+    public Long getCurrentTripId() {
+        return currentTripId;
+    }
+
+    public void setCurrentTripId(Long currentTripId) {
+        this.currentTripId = currentTripId;
+    }
 
     public String getApellido() {
         return apellido;
