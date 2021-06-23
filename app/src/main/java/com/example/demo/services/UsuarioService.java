@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.example.demo.ConstraintValueException;
 import com.example.demo.InvalidIdException;
+import com.example.demo.models.RequestModel;
 import com.example.demo.models.UsuarioModel;
 import com.example.demo.repositories.UsuarioRepository;
 
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 public class UsuarioService {
     @Autowired
     UsuarioRepository usuarioRepository;
+    @Autowired
+    RequestService requestService;
     
     public ArrayList<UsuarioModel> obtenerUsuarios(){
         return (ArrayList<UsuarioModel>) usuarioRepository.findAll();
@@ -63,6 +66,21 @@ public class UsuarioService {
            user.get().setCurrentSaldo(currentSaldo-toPay);
            guardarUsuario(user.get());
            return toPay;
+        }else{
+            throw new InvalidIdException("ID: "+usr_id+" no se encuentra en la base de datos");
+        }
+    }
+
+    public RequestModel getRequestedRideById(Long usr_id){
+        Optional<UsuarioModel> user = obtenerPorId(usr_id);
+
+        if(user.isPresent()){
+            Optional<RequestModel> requestModel = requestService.obtenerRequestPorId(user.get().getCurrentTripId());
+            if(requestModel.isPresent()){
+                return  requestModel.get();
+            }else{
+                throw new InvalidIdException("TripID: "+user.get().getCurrentTripId()+" no se encuentra en la base de datos");
+            }
         }else{
             throw new InvalidIdException("ID: "+usr_id+" no se encuentra en la base de datos");
         }

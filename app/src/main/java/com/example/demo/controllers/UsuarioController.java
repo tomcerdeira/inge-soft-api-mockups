@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import com.example.demo.models.RequestModel;
 import com.example.demo.models.UsuarioModel;
 import com.example.demo.services.UsuarioService;
 
@@ -49,6 +50,11 @@ public class UsuarioController {
         }else{
             return "No pudo eliminar el usuario con id" + id;
         }
+    }
+
+    @GetMapping("/{usr_id}/ride")
+    public RequestModel getRequestedRide(@PathVariable("usr_id") Long usr_id){
+        return this.usuarioService.getRequestedRideById(usr_id);
     }
 
 }
