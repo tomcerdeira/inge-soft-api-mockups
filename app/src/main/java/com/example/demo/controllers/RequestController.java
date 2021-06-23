@@ -16,7 +16,7 @@ public class RequestController {
     RequestService requestService;
 
     @GetMapping( path = "/{id}")
-    public Optional<RequestModel> obtenerRequestPorId(@PathVariable("id") Long id) {
+    public RequestModel obtenerRequestPorId(@PathVariable("id") Long id) {
         return this.requestService.obtenerRequestPorId(id);
     }
 

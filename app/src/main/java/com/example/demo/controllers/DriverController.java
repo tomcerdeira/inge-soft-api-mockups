@@ -21,7 +21,7 @@ public class DriverController {
     DriverService  driverService;
 
     @GetMapping()
-    public ArrayList<DriverModel> obtenerDriver(){
+    public ArrayList<DriverModel> obtenerTodosDriver(){
         return driverService.obtenerDrivers();
     }
 
@@ -31,17 +31,14 @@ public class DriverController {
     }
 
     @GetMapping( path = "/{driver_id}")
-    public Optional<DriverModel> obtenerDriverPorId(@PathVariable("driver_id") Long id) {
+    public DriverModel obtenerDriverPorId(@PathVariable("driver_id") Long id) throws InvalidIdException{
         return this.driverService.obtenerDriverPorId(id);
     }
 
     @PostMapping("{driver_id}/start_ride")
     public RequestModel startTrip(@PathVariable("driver_id") Long id){
-        Optional<DriverModel> driverModel = obtenerDriverPorId(id);
-        if(!driverModel.isPresent()){
-            throw new InvalidIdException("DriverID "+id+" no se encuentra en la base de datos");
-        }
-        return this.driverService.startRide(driverModel.get().getCurrentTripId());
+        DriverModel driverModel = obtenerDriverPorId(id);
+        return this.driverService.startRide(driverModel.getCurrentTripId());
     }
 
 

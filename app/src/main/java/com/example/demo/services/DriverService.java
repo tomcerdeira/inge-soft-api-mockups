@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.ConstraintValueException;
+import com.example.demo.InvalidIdException;
 import com.example.demo.RequestStatus;
 import com.example.demo.models.DriverModel;
 
@@ -32,8 +33,13 @@ public class DriverService {
 //        }
     }
 
-    public Optional<DriverModel> obtenerDriverPorId(Long id){
-        return driverRepository.findById(id);
+    public DriverModel obtenerDriverPorId(Long id) throws InvalidIdException{
+        Optional<DriverModel> driverModel = driverRepository.findById(id);
+        if(driverModel.isPresent()){
+            return driverModel.get();
+        }else{
+            throw new InvalidIdException("ID: "+id+" no se encuentra registrado en la base de datos");
+        }
     }
 
     public boolean eliminarDriver(Long id) {
@@ -58,11 +64,11 @@ public class DriverService {
     }
 
     public RequestModel startRide(Long tripId){
-        Optional<RequestModel> requestModel =  requestService.obtenerRequestPorId(tripId);
-        requestModel.get().setPickUpTime(System.currentTimeMillis());
-        requestModel.get().setStatus(RequestStatus.ON_TRIP.toString());
-        requestService.guardarRequest(requestModel.get());
-        return requestModel.get();
+        RequestModel requestModel =  requestService.obtenerRequestPorId(tripId);
+        requestModel.setPickUpTime(System.currentTimeMillis());
+        requestModel.setStatus(RequestStatus.ON_TRIP.toString());
+        requestService.guardarRequest(requestModel);
+        return requestModel;
     }
 
 

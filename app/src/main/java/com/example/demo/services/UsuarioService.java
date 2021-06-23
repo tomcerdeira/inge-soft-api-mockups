@@ -47,8 +47,13 @@ public class UsuarioService {
 
 
 
-    public Optional<UsuarioModel> obtenerPorId(Long id){
-        return usuarioRepository.findById(id);
+    public UsuarioModel obtenerPorId(Long id){
+        Optional<UsuarioModel> usuarioModel = usuarioRepository.findById(id);
+        if(usuarioModel.isPresent()){
+            return usuarioModel.get();
+        }else{
+            throw new InvalidIdException("UsrID: "+id+" no se encuenta registrado");
+        }
     }
 
 
@@ -66,54 +71,43 @@ public class UsuarioService {
     }
 
     public double pagarSaldo(Long usr_id,Double toPay){
-        Optional<UsuarioModel> user = obtenerPorId(usr_id);
+       UsuarioModel user = obtenerPorId(usr_id);
 
-        if(user.isPresent()){
-           double currentSaldo= user.get().getCurrentSaldo();
-           user.get().setCurrentSaldo(currentSaldo-toPay);
-           guardarUsuario(user.get());
+
+           double currentSaldo= user.getCurrentSaldo();
+           user.setCurrentSaldo(currentSaldo-toPay);
+           guardarUsuario(user);
            return toPay;
-        }else{
-            throw new InvalidIdException("ID: "+usr_id+" no se encuentra en la base de datos");
-        }
+
     }
 
     public RequestModel getRequestedRideById(Long usr_id){
-        Optional<UsuarioModel> user = obtenerPorId(usr_id);
-        if(user.isPresent()){
-            Optional<RequestModel> requestModel = requestService.obtenerRequestPorId(user.get().getCurrentTripId());
-            if(requestModel.isPresent()){
+    UsuarioModel user = obtenerPorId(usr_id);
+
+            RequestModel requestModel = requestService.obtenerRequestPorId(user.getCurrentTripId());
                 //todo ver si esto corresponde aca (depende si hacemos que el driver se mueva o no)
-                double timeToPickUp = ourRequestService.getTimeOfPickUpEstimate(requestModel.get().getDriver_id(),requestModel.get().getInit_pos_lat(),requestModel.get().getInit_pos_long());
-                double timeToarrive = ourRequestService.getTimeOfArrivalEstimate(requestModel.get().getDriver_id(),requestModel.get().getInit_pos_lat(),requestModel.get().getInit_pos_long(),requestModel.get().getDest_latitude(),requestModel.get().getDes_longitude());
-                System.out.println("Current time - requestTime: " + (System.currentTimeMillis() - requestModel.get().getRequestTime()) + " | timeToPickUp: " + timeToPickUp);
-                if(System.currentTimeMillis() - requestModel.get().getRequestTime() >=timeToPickUp) {
-                    Optional<DriverModel> driverModel = driverService.obtenerDriverPorId(requestModel.get().getDriver_id());
-                    if (requestModel.get().getPickUpTime() == null) {
-                        requestModel.get().setStatus(RequestStatus.DRIVER_ARRIVED_INITIAL.toString());
-                        driverModel.get().setLatitude(requestModel.get().getInit_pos_lat());
-                        driverModel.get().setLongitude(requestModel.get().getInit_pos_long());
-                    } else if(System.currentTimeMillis() - requestModel.get().getPickUpTime() >= timeToarrive){
-                        requestModel.get().setStatus(RequestStatus.DRIVER_ARRIVED_DESTINATION.toString());
-                        requestModel.get().setTripCompletedTime(System.currentTimeMillis());
-                        driverModel.get().setLatitude(requestModel.get().getDest_latitude());
-                        driverModel.get().setLongitude(requestModel.get().getDes_longitude());
-                        driverModel.get().setAvailable(true);
+                double timeToPickUp = ourRequestService.getTimeOfPickUpEstimate(requestModel.getDriver_id(),requestModel.getInit_pos_lat(),requestModel.getInit_pos_long());
+                double timeToarrive = ourRequestService.getTimeOfArrivalEstimate(requestModel.getDriver_id(),requestModel.getInit_pos_lat(),requestModel.getInit_pos_long(),requestModel.getDest_latitude(),requestModel.getDes_longitude());
+                System.out.println("Current time - requestTime: " + (System.currentTimeMillis() - requestModel.getRequestTime()) + " | timeToPickUp: " + timeToPickUp);
+                if(System.currentTimeMillis() - requestModel.getRequestTime() >=timeToPickUp) {
+                    DriverModel driverModel = driverService.obtenerDriverPorId(requestModel.getDriver_id());
+                    if (requestModel.getPickUpTime() == null) {
+                        requestModel.setStatus(RequestStatus.DRIVER_ARRIVED_INITIAL.toString());
+                        driverModel.setLatitude(requestModel.getInit_pos_lat());
+                        driverModel.setLongitude(requestModel.getInit_pos_long());
+                    } else if(System.currentTimeMillis() - requestModel.getPickUpTime() >= timeToarrive){
+                        requestModel.setStatus(RequestStatus.DRIVER_ARRIVED_DESTINATION.toString());
+                        requestModel.setTripCompletedTime(System.currentTimeMillis());
+                        driverModel.setLatitude(requestModel.getDest_latitude());
+                        driverModel.setLongitude(requestModel.getDes_longitude());
+                        driverModel.setAvailable(true);
                     }else{
-                        requestModel.get().setStatus(RequestStatus.ON_TRIP.toString());
+                        requestModel.setStatus(RequestStatus.ON_TRIP.toString());
                     }
-                    driverService.guardarDriver(driverModel.get());
+                    driverService.guardarDriver(driverModel);
                 }
-                requestService.guardarRequest(requestModel.get());
-                return  requestModel.get();
-            }else{
-                throw new InvalidIdException("TripID: "+user.get().getCurrentTripId()+" no se encuentra en la base de datos");
-            }
-        }else{
-            throw new InvalidIdException("ID: "+usr_id+" no se encuentra en la base de datos");
-        }
+                requestService.guardarRequest(requestModel);
+                return  requestModel;
     }
 
-
-    
 }
