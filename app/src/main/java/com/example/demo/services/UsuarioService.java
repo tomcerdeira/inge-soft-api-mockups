@@ -11,6 +11,7 @@ import com.example.demo.models.RequestModel;
 import com.example.demo.models.UsuarioModel;
 import com.example.demo.repositories.UsuarioRepository;
 
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -82,32 +83,35 @@ public class UsuarioService {
     }
 
     public RequestModel getRequestedRideById(Long usr_id){
+        System.out.println("SERVIDE USER ID"+usr_id);
     UsuarioModel user = obtenerPorId(usr_id);
-
-            RequestModel requestModel = requestService.obtenerRequestPorId(user.getCurrentTripId());
+            if(user.getCurrentTripId()!=null) {
+                RequestModel requestModel = requestService.obtenerRequestPorId(user.getCurrentTripId());
                 //todo ver si esto corresponde aca (depende si hacemos que el driver se mueva o no)
-                double timeToPickUp = ourRequestService.getTimeOfPickUpEstimate(requestModel.getDriver_id(),requestModel.getInit_pos_lat(),requestModel.getInit_pos_long());
-                double timeToarrive = ourRequestService.getTimeOfArrivalEstimate(requestModel.getDriver_id(),requestModel.getInit_pos_lat(),requestModel.getInit_pos_long(),requestModel.getDest_latitude(),requestModel.getDes_longitude());
+                double timeToPickUp = ourRequestService.getTimeOfPickUpEstimate(requestModel.getDriver_id(), requestModel.getInit_pos_lat(), requestModel.getInit_pos_long());
+                double timeToarrive = ourRequestService.getTimeOfArrivalEstimate(requestModel.getDriver_id(), requestModel.getInit_pos_lat(), requestModel.getInit_pos_long(), requestModel.getDest_latitude(), requestModel.getDes_longitude());
                 System.out.println("Current time - requestTime: " + (System.currentTimeMillis() - requestModel.getRequestTime()) + " | timeToPickUp: " + timeToPickUp);
-                if(System.currentTimeMillis() - requestModel.getRequestTime() >=timeToPickUp) {
+                if (System.currentTimeMillis() - requestModel.getRequestTime() >= timeToPickUp) {
                     DriverModel driverModel = driverService.obtenerDriverPorId(requestModel.getDriver_id());
                     if (requestModel.getPickUpTime() == null) {
                         requestModel.setStatus(RequestStatus.DRIVER_ARRIVED_INITIAL.toString());
                         driverModel.setLatitude(requestModel.getInit_pos_lat());
                         driverModel.setLongitude(requestModel.getInit_pos_long());
-                    } else if(System.currentTimeMillis() - requestModel.getPickUpTime() >= timeToarrive){
+                    } else if (System.currentTimeMillis() - requestModel.getPickUpTime() >= timeToarrive) {
                         requestModel.setStatus(RequestStatus.DRIVER_ARRIVED_DESTINATION.toString());
                         requestModel.setTripCompletedTime(System.currentTimeMillis());
                         driverModel.setLatitude(requestModel.getDest_latitude());
                         driverModel.setLongitude(requestModel.getDes_longitude());
                         driverModel.setAvailable(true);
-                    }else{
+                    } else {
                         requestModel.setStatus(RequestStatus.ON_TRIP.toString());
                     }
                     driverService.guardarDriver(driverModel);
                 }
                 requestService.guardarRequest(requestModel);
-                return  requestModel;
+                return requestModel;
+            }
+            throw new InvalidIdException("El usuario con ID:"+usr_id+" no tiene viaje asociado");
     }
 
 }
