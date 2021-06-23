@@ -1,9 +1,9 @@
 package com.example.demo.services;
 
-import com.example.demo.models.DriverModel;
-import com.example.demo.models.OurRequestModel;
-import com.example.demo.models.ProductModel;
-import com.example.demo.models.RequestModel;
+import com.example.demo.InvalidIdException;
+import com.example.demo.RequestStatus;
+import com.example.demo.UnavailableDriverException;
+import com.example.demo.models.*;
 import com.example.demo.repositories.DriverRepository;
 import com.example.demo.repositories.OurRequestRepository;
 import com.example.demo.repositories.RequestRepository;
@@ -18,6 +18,7 @@ import java.util.Optional;
 
 @Service
 public class OurRequestService {
+
     @Autowired
     OurRequestRepository ourRequestRepository;
     @Autowired
@@ -28,6 +29,8 @@ public class OurRequestService {
     DriverService driverService;
     @Autowired
     ProductService productService;
+    @Autowired
+    UsuarioService userService;
 
     public List<DriverModel> getAvailablesDrivers(Double latitudeInit,Double longitudeInit,Double latitudeDest,Double longitudeDest){
 
@@ -41,7 +44,7 @@ public class OurRequestService {
                     if(productModel.get().getMinimum()<dist){
                         if(calculateDistanceInMeters(latitudeInit,longitudeInit,d.getLatitude(),d.getLongitude()) <500)
                         {
-                            System.out.println(calculateDistanceInMeters(latitudeInit,longitudeInit,d.getLatitude(),d.getLongitude())+" Dist");
+                            //System.out.println(calculateDistanceInMeters(latitudeInit,longitudeInit,d.getLatitude(),d.getLongitude())+" Dist");
                             aux.add(d);
                         }
                     }
@@ -61,7 +64,7 @@ public class OurRequestService {
                 totalTripCost += product.get().getService_fee();
                 //TODO: ver si agregamos el costPerMinute
                 totalTripCost += dist*product.get().getCost_per_distance();
-                System.out.println("Distancia: " + dist +  " Precio: " + totalTripCost);
+                //System.out.println("Distancia: " + dist +  " Precio: " + totalTripCost);
             }
         }
         return totalTripCost;
@@ -94,42 +97,37 @@ public class OurRequestService {
     }
 
 
-    public RequestModel setNewDrive(Long driverId,Double latitudeInit, Double longitudeInit, Double latitudeDest, Double longitudeDest){
+    public RequestModel setNewDrive(Long userId, Long driverId,Double latitudeInit, Double longitudeInit, Double latitudeDest, Double longitudeDest){
         Optional<DriverModel> driver = driverService.obtenerDriverPorId(driverId);
+        Optional<UsuarioModel> user = userService.obtenerPorId(userId);
         DriverModel driverModel;
         RequestModel requestModel =  requestService.guardarRequest(new RequestModel());
-        if(driver.isPresent()){
+        requestModel.setStatus(RequestStatus.CONFIRMING_DRIVER.toString());
+        if(driver.isPresent()) {
             driverModel = driver.get();
-            requestModel.setCar_model(driverModel.getModelo_auto());
-            if(driverModel.isAvailable()){
-                requestModel.setCar_model(driverModel.getModelo_auto());
-                requestModel.setCar_brand(driverModel.getMarca_auto());
-                requestModel.setCar_plate(driverModel.getPatente_auto());
-                requestModel.setCar_image(driverModel.getImagen_auto());
-                requestModel.setProduct_id(driverModel.getProduct_id());
-                requestModel.setStatus("coming"); // todo hace enum
-                requestModel.setShared(false); // todo ver q hacer
-                requestModel.setDriver_telephone(driverModel.getTelefono());
-                requestModel.setDriver_picture(driverModel.getImagen_conductor());
-                requestModel.setDriver_name(driverModel.getNombre());
-                requestModel.setDriver_rate(driverModel.getRate());
-                requestModel.setDriver_longitude(driverModel.getLongitude());
-                requestModel.setDriver_latitude(driverModel.getLatitude());
-
-                requestModel.setDes_longitude(longitudeDest);
-                requestModel.setDest_latitude(latitudeDest);
-                driver.get().setAvailable(false);
-                driverRepository.save(driverModel);
-
-               requestService.guardarRequest(requestModel);
+            if (driverModel.isAvailable()) {
+                if (user.isPresent()) {
+                    user.get().setCurrentTripId(requestModel.getId());
+                    driverModel.setCurrentTripId(requestModel.getId());
+                    requestModel.setProduct_id(driverModel.getProduct_id());
+                    requestModel.setRequestTime(System.currentTimeMillis());
+                    requestModel.setDriver_id(driverModel.getId());
+                    requestModel.setStatus(RequestStatus.WAITING_FOR_PICK_UP.toString());
+                    requestModel.setDes_longitude(longitudeDest);
+                    requestModel.setDest_latitude(latitudeDest);
+                    driver.get().setAvailable(false);
+                    driverRepository.save(driverModel);
+                    requestService.guardarRequest(requestModel);
+                } else {
+                    throw new InvalidIdException("ID: " + userId + " no se encuentra en la base de datos");
+                }
+            } else {
+                throw new UnavailableDriverException("Conductor con ID: " + driverId + " no se encuentra disponible");
             }
-//            else{
-//                //todo ver que hacer en caso de que no haya
-//            }
+        }else{
+                throw new InvalidIdException("Conductor con ID: "+driverId+" no se encuentra en la base de datos");
         }
-
         return requestModel;
     }
-
 
 }

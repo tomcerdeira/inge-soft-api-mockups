@@ -38,8 +38,8 @@ public class OurRequestController {
     }
 
     @PostMapping("/ride")
-    public RequestModel setNewRide(@RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit, @RequestParam("longitudeInit") Double longitudeInit, @RequestParam("latitudeDest") Double latitudeDest, @RequestParam("longitudeDest") Double longitudeDest){
-        return requestService.setNewDrive(driverId,latitudeInit,longitudeInit,latitudeDest,longitudeDest);
+    public RequestModel setNewRide(@RequestParam("userId") Long userId, @RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit, @RequestParam("longitudeInit") Double longitudeInit, @RequestParam("latitudeDest") Double latitudeDest, @RequestParam("longitudeDest") Double longitudeDest){
+        return requestService.setNewDrive(userId,driverId,latitudeInit,longitudeInit,latitudeDest,longitudeDest);
     }
 
 }

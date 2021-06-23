@@ -17,19 +17,12 @@ public class RequestModel {
     private Long product_id;
     private String status;
 
-    private boolean shared;
-    //Driver info
-    private Integer driver_telephone;
-    private String driver_picture;
-    private String driver_name;
-    private Integer driver_rate;
-    private Double driver_longitude;
-    private Double driver_latitude;
-    //Car info
-    private String car_brand;
-    private String car_model;
-    private String car_plate;
-    private String car_image;
+    private Long requestTime;
+    private Long pickUpTime; //TODO: falta setear cuando el conductor lo pasa a buscar
+    private Long tripCompletedTime; //TODO: falta setear cuando termina el viaje
+
+    private Long driver_id;
+
     //Destination info
     private String dest_alias;
     private Double dest_latitude;
@@ -64,94 +57,36 @@ public class RequestModel {
         this.status = status;
     }
 
-
-
-    public boolean isShared() {
-        return shared;
+    public Long getRequestTime() {
+        return requestTime;
     }
 
-    public void setShared(boolean shared) {
-        this.shared = shared;
+    public void setRequestTime(Long requestTime) {
+        this.requestTime = requestTime;
     }
 
-    public Integer getDriver_telephone() {
-        return driver_telephone;
+    public Long getPickUpTime() {
+        return pickUpTime;
     }
 
-    public void setDriver_telephone(Integer driver_telephone) {
-        this.driver_telephone = driver_telephone;
+    public void setPickUpTime(Long pickUpTime) {
+        this.pickUpTime = pickUpTime;
     }
 
-    public String getDriver_picture() {
-        return driver_picture;
+    public Long getTripCompletedTime() {
+        return tripCompletedTime;
     }
 
-    public void setDriver_picture(String driver_picture) {
-        this.driver_picture = driver_picture;
+    public void setTripCompletedTime(Long tripCompletedTime) {
+        this.tripCompletedTime = tripCompletedTime;
     }
 
-    public String getDriver_name() {
-        return driver_name;
+    public Long getDriver_id() {
+        return driver_id;
     }
 
-    public void setDriver_name(String driver_name) {
-        this.driver_name = driver_name;
-    }
-
-    public Integer getDriver_rate() {
-        return driver_rate;
-    }
-
-    public void setDriver_rate(Integer driver_rate) {
-        this.driver_rate = driver_rate;
-    }
-
-    public Double getDriver_longitude() {
-        return driver_longitude;
-    }
-
-    public void setDriver_longitude(Double driver_longitude) {
-        this.driver_longitude = driver_longitude;
-    }
-
-    public Double getDriver_latitude() {
-        return driver_latitude;
-    }
-
-    public void setDriver_latitude(Double driver_latitude) {
-        this.driver_latitude = driver_latitude;
-    }
-
-    public String getCar_brand() {
-        return car_brand;
-    }
-
-    public void setCar_brand(String car_brand) {
-        this.car_brand = car_brand;
-    }
-
-    public String getCar_model() {
-        return car_model;
-    }
-
-    public void setCar_model(String car_model) {
-        this.car_model = car_model;
-    }
-
-    public String getCar_plate() {
-        return car_plate;
-    }
-
-    public void setCar_plate(String car_plate) {
-        this.car_plate = car_plate;
-    }
-
-    public String getCar_image() {
-        return car_image;
-    }
-
-    public void setCar_image(String car_image) {
-        this.car_image = car_image;
+    public void setDriver_id(Long driver_id) {
+        this.driver_id = driver_id;
     }
 
     public String getDest_alias() {

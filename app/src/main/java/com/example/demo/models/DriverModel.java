@@ -15,6 +15,7 @@ public class DriverModel {
     private Long product_id;
 
     private boolean isAvailable = true;
+    private Long currentTripId;
 
     private String apellido;
     @Column(unique = false, nullable = false)
@@ -32,6 +33,11 @@ public class DriverModel {
     @Column(columnDefinition = "Integer default 0")
     private Double longitude=(double)0;
 
+    public void finishTrip(){
+        this.currentTripId = null;
+        this.isAvailable = true;
+    }
+
     public Long getProduct_id() {
         return product_id;
     }
@@ -46,6 +52,14 @@ public class DriverModel {
 
     public void setAvailable(boolean available) {
         isAvailable = available;
+    }
+
+    public Long getCurrentTripId() {
+        return currentTripId;
+    }
+
+    public void setCurrentTripId(Long currentTripId) {
+        this.currentTripId = currentTripId;
     }
 
     public Long getId() {

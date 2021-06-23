@@ -11,11 +11,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/requests")
 public class RequestController {
+
     @Autowired
     RequestService requestService;
-
-
-
 
     @GetMapping( path = "/{id}")
     public Optional<RequestModel> obtenerRequestPorId(@PathVariable("id") Long id) {
