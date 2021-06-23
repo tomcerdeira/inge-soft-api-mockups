@@ -85,17 +85,23 @@ public class UsuarioService {
             if(requestModel.isPresent()){
                 //todo ver si esto corresponde aca (depende si hacemos que el driver se mueva o no)
                 double timeToPickUp = ourRequestService.getTimeOfPickUpEstimate(requestModel.get().getDriver_id(),requestModel.get().getInit_pos_lat(),requestModel.get().getInit_pos_long());
+                double timeToarrive = ourRequestService.getTimeOfArrivalEstimate(requestModel.get().getDriver_id(),requestModel.get().getInit_pos_lat(),requestModel.get().getInit_pos_long(),requestModel.get().getDest_latitude(),requestModel.get().getDes_longitude());
                 System.out.println("Current time - requestTime: " + (System.currentTimeMillis() - requestModel.get().getRequestTime()) + " | timeToPickUp: " + timeToPickUp);
                 if(System.currentTimeMillis() - requestModel.get().getRequestTime() >=timeToPickUp) {
-                    if (requestModel.get().getPickUpTime() == null && requestModel.get().getStatus().equals(RequestStatus.WAITING_FOR_PICK_UP.toString())) {
+                    Optional<DriverModel> driverModel = driverService.obtenerDriverPorId(requestModel.get().getDriver_id());
+                    if (requestModel.get().getPickUpTime() == null) {
                         requestModel.get().setStatus(RequestStatus.DRIVER_ARRIVED_INITIAL.toString());
-                        Optional<DriverModel> driverModel = driverService.obtenerDriverPorId(requestModel.get().getDriver_id());
                         driverModel.get().setLatitude(requestModel.get().getInit_pos_lat());
                         driverModel.get().setLongitude(requestModel.get().getInit_pos_long());
-                        driverService.guardarDriver(driverModel.get());
-                    } else {
+                    } else if(System.currentTimeMillis() - requestModel.get().getPickUpTime() >= timeToarrive){
+                        requestModel.get().setStatus(RequestStatus.DRIVER_ARRIVED_DESTINATION.toString());
+                        requestModel.get().setTripCompletedTime(System.currentTimeMillis());
+                        driverModel.get().setLatitude(requestModel.get().getDest_latitude());
+                        driverModel.get().setLongitude(requestModel.get().getDes_longitude());
+                    }else{
                         requestModel.get().setStatus(RequestStatus.ON_TRIP.toString());
                     }
+                    driverService.guardarDriver(driverModel.get());
                 }
                 requestService.guardarRequest(requestModel.get());
                 return  requestModel.get();
