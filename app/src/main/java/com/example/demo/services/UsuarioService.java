@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import com.example.demo.ConstraintValueException;
 import com.example.demo.InvalidIdException;
+import com.example.demo.RequestStatus;
+import com.example.demo.models.DriverModel;
 import com.example.demo.models.RequestModel;
 import com.example.demo.models.UsuarioModel;
 import com.example.demo.repositories.UsuarioRepository;
@@ -18,6 +20,11 @@ public class UsuarioService {
     UsuarioRepository usuarioRepository;
     @Autowired
     RequestService requestService;
+    @Autowired
+    OurRequestService ourRequestService;
+    @Autowired
+    DriverService driverService;
+
     
     public ArrayList<UsuarioModel> obtenerUsuarios(){
         return (ArrayList<UsuarioModel>) usuarioRepository.findAll();
@@ -73,10 +80,23 @@ public class UsuarioService {
 
     public RequestModel getRequestedRideById(Long usr_id){
         Optional<UsuarioModel> user = obtenerPorId(usr_id);
-
         if(user.isPresent()){
             Optional<RequestModel> requestModel = requestService.obtenerRequestPorId(user.get().getCurrentTripId());
             if(requestModel.isPresent()){
+                //todo ver si esto corresponde aca (depende si hacemos que el driver se mueva o no)
+                double timeToPickUp = ourRequestService.getTimeOfPickUpEstimate(requestModel.get().getDriver_id(),requestModel.get().getInit_pos_lat(),requestModel.get().getInit_pos_long());
+                if(System.currentTimeMillis() - requestModel.get().getRequestTime() <=timeToPickUp) {
+                    if (requestModel.get().getPickUpTime() == null && requestModel.get().getStatus().equals(RequestStatus.WAITING_FOR_PICK_UP.toString())) {
+                        requestModel.get().setStatus(RequestStatus.DRIVER_ARRIVED_INITIAL.toString());
+                        Optional<DriverModel> driverModel = driverService.obtenerDriverPorId(requestModel.get().getDriver_id());
+                        driverModel.get().setLatitude(requestModel.get().getInit_pos_lat());
+                        driverModel.get().setLongitude(requestModel.get().getInit_pos_long());
+                        driverService.guardarDriver(driverModel.get());
+                    } else {
+                        requestModel.get().setStatus(RequestStatus.ON_TRIP.toString());
+                    }
+                }
+                requestService.guardarRequest(requestModel.get());
                 return  requestModel.get();
             }else{
                 throw new InvalidIdException("TripID: "+user.get().getCurrentTripId()+" no se encuentra en la base de datos");

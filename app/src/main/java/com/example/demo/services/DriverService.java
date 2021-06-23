@@ -1,8 +1,10 @@
 package com.example.demo.services;
 
 import com.example.demo.ConstraintValueException;
+import com.example.demo.RequestStatus;
 import com.example.demo.models.DriverModel;
 
+import com.example.demo.models.RequestModel;
 import com.example.demo.repositories.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ import java.util.Optional;
 public class DriverService {
     @Autowired
     DriverRepository driverRepository;
+    @Autowired
+    RequestService requestService;
 
     public ArrayList<DriverModel> obtenerDrivers(){
         return (ArrayList<DriverModel>) driverRepository.findAll();
@@ -51,6 +55,14 @@ public class DriverService {
             }
         }
         return aux;
+    }
+
+    public RequestModel startRide(Long tripId){
+        Optional<RequestModel> requestModel =  requestService.obtenerRequestPorId(tripId);
+        requestModel.get().setPickUpTime(System.currentTimeMillis());
+        requestModel.get().setStatus(RequestStatus.ON_TRIP.toString());
+        requestService.guardarRequest(requestModel.get());
+        return requestModel.get();
     }
 
 

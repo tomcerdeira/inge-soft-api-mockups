@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 
-
+import com.example.demo.InvalidIdException;
 import com.example.demo.models.DriverModel;
 
+import com.example.demo.models.RequestModel;
 import com.example.demo.services.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +30,18 @@ public class DriverController {
             return this.driverService.guardarDriver(driver);
     }
 
-    @GetMapping( path = "/{id}")
-    public Optional<DriverModel> obtenerDriverPorId(@PathVariable("id") Long id) {
+    @GetMapping( path = "/{driver_id}")
+    public Optional<DriverModel> obtenerDriverPorId(@PathVariable("driver_id") Long id) {
         return this.driverService.obtenerDriverPorId(id);
+    }
+
+    @PostMapping("{driver_id}/start_ride")
+    public RequestModel startTrip(@PathVariable("driver_id") Long id){
+        Optional<DriverModel> driverModel = obtenerDriverPorId(id);
+        if(!driverModel.isPresent()){
+            throw new InvalidIdException("DriverID "+id+" no se encuentra en la base de datos");
+        }
+        return this.driverService.startRide(driverModel.get().getCurrentTripId());
     }
 
 

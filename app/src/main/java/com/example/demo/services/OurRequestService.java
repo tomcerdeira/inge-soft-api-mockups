@@ -115,6 +115,8 @@ public class OurRequestService {
                     requestModel.setStatus(RequestStatus.WAITING_FOR_PICK_UP.toString());
                     requestModel.setDes_longitude(longitudeDest);
                     requestModel.setDest_latitude(latitudeDest);
+                    requestModel.setInit_pos_lat(latitudeInit);
+                    requestModel.setInit_pos_long(longitudeInit);
                     driver.get().setAvailable(false);
                     driverRepository.save(driverModel);
                     requestService.guardarRequest(requestModel);

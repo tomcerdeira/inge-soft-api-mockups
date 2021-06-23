@@ -28,6 +28,11 @@ public class RequestModel {
     private Double dest_latitude;
     private Double des_longitude;
 
+    //Init position info
+    private String init_pos_alias;
+    private Double init_pos_lat;
+    private Double init_pos_long;
+
 
     public RequestModel() {
 
@@ -113,4 +118,27 @@ public class RequestModel {
         this.des_longitude = des_longitude;
     }
 
+    public String getInit_pos_alias() {
+        return init_pos_alias;
+    }
+
+    public void setInit_pos_alias(String init_pos_alias) {
+        this.init_pos_alias = init_pos_alias;
+    }
+
+    public Double getInit_pos_lat() {
+        return init_pos_lat;
+    }
+
+    public void setInit_pos_lat(Double init_pos_lat) {
+        this.init_pos_lat = init_pos_lat;
+    }
+
+    public Double getInit_pos_long() {
+        return init_pos_long;
+    }
+
+    public void setInit_pos_long(Double init_pos_long) {
+        this.init_pos_long = init_pos_long;
+    }
 }
