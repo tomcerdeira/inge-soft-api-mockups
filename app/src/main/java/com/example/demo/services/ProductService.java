@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.InvalidIdException;
 import com.example.demo.models.ProductModel;
 import com.example.demo.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,13 @@ public class ProductService {
         return productRepository.save(producto);
     }
 
-    public Optional<ProductModel> obtenerPorId(Long id){
-        return productRepository.findById(id);
+    public ProductModel obtenerPorId(Long id){
+        Optional<ProductModel> productModel= productRepository.findById(id);
+        if(productModel.isPresent()){
+            return productModel.get();
+        }else{
+            throw new InvalidIdException("ProdID: "+id+" no existe en la base de datos");
+        }
     }
 
 
