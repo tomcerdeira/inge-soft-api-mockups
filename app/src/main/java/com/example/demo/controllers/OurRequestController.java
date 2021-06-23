@@ -17,7 +17,7 @@ public class OurRequestController {
     @Autowired
     OurRequestService requestService;
 
-    @GetMapping("/avaliableDrivers")
+    @GetMapping("/availableDrivers")
     public List<DriverModel> availableDriver(@RequestParam("latitudeInit") Double latitudeInit,@RequestParam("longitudeInit") Double longitudeInit,@RequestParam("latitudeDest") Double latitudeDest,@RequestParam("longitudeDest") Double longitudeDest){ //
         return requestService.getAvailablesDrivers(latitudeInit,longitudeInit,latitudeDest,longitudeDest);
     }

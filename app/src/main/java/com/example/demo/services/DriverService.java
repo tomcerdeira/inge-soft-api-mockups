@@ -24,12 +24,12 @@ public class DriverService {
     }
 
     public DriverModel guardarDriver(DriverModel driver){
-        try{
+        //try{
 
             return driverRepository.save(driver);
-        }catch (Exception e){
-            throw new ConstraintValueException("La patente "+driver.getPatente_auto()+" ya se encuentra registrada");
-        }
+//        }catch (Exception e){
+//            throw new ConstraintValueException("La patente "+driver.getPatente_auto()+" ya se encuentra registrada");
+//        }
     }
 
     public Optional<DriverModel> obtenerDriverPorId(Long id){
