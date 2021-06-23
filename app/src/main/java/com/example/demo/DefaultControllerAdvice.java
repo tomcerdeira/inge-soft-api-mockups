@@ -29,4 +29,11 @@ public class DefaultControllerAdvice{
         RestApiError apiError = new RestApiError(HttpStatus.NOT_FOUND,"ERROR: invalid id",ex.getMessage());
         return new ResponseEntity<>(apiError,apiError.getHttpStatus());
     }
+
+    @ExceptionHandler(UnavailableDriverException.class)//unavailable
+    protected ResponseEntity<Object> handleUnavailableDriver(InvalidIdException ex){
+        RestApiError apiError = new RestApiError(HttpStatus.IM_USED,"ERROR: unavailable driver with id",ex.getMessage());
+        return new ResponseEntity<>(apiError,apiError.getHttpStatus());
+    }
+
 }
