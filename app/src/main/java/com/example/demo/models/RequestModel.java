@@ -16,15 +16,15 @@ public class RequestModel {
 
     private Long product_id;
     private String status;
-    private double surge_multiplier;
+
     private boolean shared;
     //Driver info
-    private String driver_telephone;
+    private Integer driver_telephone;
     private String driver_picture;
     private String driver_name;
     private Integer driver_rate;
-    private Integer driver_longitude;
-    private Integer driver_latitude;
+    private Double driver_longitude;
+    private Double driver_latitude;
     //Car info
     private String car_brand;
     private String car_model;
@@ -32,12 +32,13 @@ public class RequestModel {
     private String car_image;
     //Destination info
     private String dest_alias;
-    private Integer dest_latitude;
-    private Integer des_longitude;
-    private String dest_name;
-    private String dest_addr;
-    private Integer dest_eta;
+    private Double dest_latitude;
+    private Double des_longitude;
 
+
+    public RequestModel() {
+
+    }
 
     public Long getId() {
         return id;
@@ -63,13 +64,7 @@ public class RequestModel {
         this.status = status;
     }
 
-    public double getSurge_multiplier() {
-        return surge_multiplier;
-    }
 
-    public void setSurge_multiplier(double surge_multiplier) {
-        this.surge_multiplier = surge_multiplier;
-    }
 
     public boolean isShared() {
         return shared;
@@ -79,11 +74,11 @@ public class RequestModel {
         this.shared = shared;
     }
 
-    public String getDriver_telephone() {
+    public Integer getDriver_telephone() {
         return driver_telephone;
     }
 
-    public void setDriver_telephone(String driver_telephone) {
+    public void setDriver_telephone(Integer driver_telephone) {
         this.driver_telephone = driver_telephone;
     }
 
@@ -111,19 +106,19 @@ public class RequestModel {
         this.driver_rate = driver_rate;
     }
 
-    public Integer getDriver_longitude() {
+    public Double getDriver_longitude() {
         return driver_longitude;
     }
 
-    public void setDriver_longitude(Integer driver_longitude) {
+    public void setDriver_longitude(Double driver_longitude) {
         this.driver_longitude = driver_longitude;
     }
 
-    public Integer getDriver_latitude() {
+    public Double getDriver_latitude() {
         return driver_latitude;
     }
 
-    public void setDriver_latitude(Integer driver_latitude) {
+    public void setDriver_latitude(Double driver_latitude) {
         this.driver_latitude = driver_latitude;
     }
 
@@ -167,43 +162,20 @@ public class RequestModel {
         this.dest_alias = dest_alias;
     }
 
-    public Integer getDest_latitude() {
+    public Double getDest_latitude() {
         return dest_latitude;
     }
 
-    public void setDest_latitude(Integer dest_latitude) {
+    public void setDest_latitude(Double dest_latitude) {
         this.dest_latitude = dest_latitude;
     }
 
-    public Integer getDes_longitude() {
+    public Double getDes_longitude() {
         return des_longitude;
     }
 
-    public void setDes_longitude(Integer des_longitude) {
+    public void setDes_longitude(Double des_longitude) {
         this.des_longitude = des_longitude;
     }
 
-    public String getDest_name() {
-        return dest_name;
-    }
-
-    public void setDest_name(String dest_name) {
-        this.dest_name = dest_name;
-    }
-
-    public String getDest_addr() {
-        return dest_addr;
-    }
-
-    public void setDest_addr(String dest_addr) {
-        this.dest_addr = dest_addr;
-    }
-
-    public Integer getDest_eta() {
-        return dest_eta;
-    }
-
-    public void setDest_eta(Integer dest_eta) {
-        this.dest_eta = dest_eta;
-    }
 }

@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.ConstraintValueException;
 import com.example.demo.models.DriverModel;
 
 import com.example.demo.repositories.DriverRepository;
@@ -19,7 +20,13 @@ public class DriverService {
     }
 
     public DriverModel guardarDriver(DriverModel driver){
-        return driverRepository.save(driver);
+        try{
+
+            return driverRepository.save(driver);
+        }catch (Exception e){
+            //TODO ver el tema de que si le mando
+            throw new ConstraintValueException("La patente "+driver.getPatente_auto()+" ya se encuentra registrada");
+        }
     }
 
     public Optional<DriverModel> obtenerDriverPorId(Long id){

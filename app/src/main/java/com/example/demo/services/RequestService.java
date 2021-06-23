@@ -17,6 +17,7 @@ public class RequestService {
         return requestRepository.findById(id);
     }
 
+    public RequestModel guardarRequest(RequestModel requestModel){return  requestRepository.save(requestModel);}
 
 
 

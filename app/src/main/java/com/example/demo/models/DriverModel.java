@@ -19,6 +19,7 @@ public class DriverModel {
     private String apellido;
     @Column(unique = false, nullable = false)
     private String marca_auto;
+    private String modelo_auto;
     @Column(unique = true, nullable = false)
     private String patente_auto;
     private String imagen_auto;
@@ -57,6 +58,14 @@ public class DriverModel {
 
     public String getNombre() {
         return nombre;
+    }
+
+    public String getModelo_auto() {
+        return modelo_auto;
+    }
+
+    public void setModelo_auto(String modelo_auto) {
+        this.modelo_auto = modelo_auto;
     }
 
     public void setNombre(String nombre) {

@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.models.DriverModel;
 import com.example.demo.models.OurRequestModel;
+import com.example.demo.models.RequestModel;
 import com.example.demo.services.OurRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,11 @@ public class OurRequestController {
     @GetMapping("/estimateArrival")
     public long getTimeEstimateOfArrivalOfDriverId(@RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit,@RequestParam("longitudeInit") Double longitudeInit,@RequestParam("latitudeDest") Double latitudeDest,@RequestParam("longitudeDest") Double longitudeDest){ //
         return requestService.getTimeOfArrivalEstimate(driverId, latitudeInit,longitudeInit,latitudeDest,longitudeDest);
+    }
+
+    @PostMapping("/ride")
+    public RequestModel setNewRide(@RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit, @RequestParam("longitudeInit") Double longitudeInit, @RequestParam("latitudeDest") Double latitudeDest, @RequestParam("longitudeDest") Double longitudeDest){
+        return requestService.setNewDrive(driverId,latitudeInit,longitudeInit,latitudeDest,longitudeDest);
     }
 
 }
