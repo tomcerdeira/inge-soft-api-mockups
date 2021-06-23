@@ -98,6 +98,7 @@ public class UsuarioService {
                         requestModel.get().setTripCompletedTime(System.currentTimeMillis());
                         driverModel.get().setLatitude(requestModel.get().getDest_latitude());
                         driverModel.get().setLongitude(requestModel.get().getDes_longitude());
+                        driverModel.get().setAvailable(true);
                     }else{
                         requestModel.get().setStatus(RequestStatus.ON_TRIP.toString());
                     }
