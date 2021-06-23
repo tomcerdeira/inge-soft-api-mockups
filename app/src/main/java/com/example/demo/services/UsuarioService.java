@@ -85,7 +85,8 @@ public class UsuarioService {
             if(requestModel.isPresent()){
                 //todo ver si esto corresponde aca (depende si hacemos que el driver se mueva o no)
                 double timeToPickUp = ourRequestService.getTimeOfPickUpEstimate(requestModel.get().getDriver_id(),requestModel.get().getInit_pos_lat(),requestModel.get().getInit_pos_long());
-                if(System.currentTimeMillis() - requestModel.get().getRequestTime() <=timeToPickUp) {
+                System.out.println("Current time - requestTime: " + (System.currentTimeMillis() - requestModel.get().getRequestTime()) + " | timeToPickUp: " + timeToPickUp);
+                if(System.currentTimeMillis() - requestModel.get().getRequestTime() >=timeToPickUp) {
                     if (requestModel.get().getPickUpTime() == null && requestModel.get().getStatus().equals(RequestStatus.WAITING_FOR_PICK_UP.toString())) {
                         requestModel.get().setStatus(RequestStatus.DRIVER_ARRIVED_INITIAL.toString());
                         Optional<DriverModel> driverModel = driverService.obtenerDriverPorId(requestModel.get().getDriver_id());
