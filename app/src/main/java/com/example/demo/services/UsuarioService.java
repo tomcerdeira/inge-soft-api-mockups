@@ -24,10 +24,13 @@ public class UsuarioService {
         try {
             return usuarioRepository.save(usuario);
         }catch(Exception e){
-            if(e.getMessage().contains("email")){
+            System.out.println(e.getMessage()); // todo borrar esta linea
+            if(e.getMessage().contains("[uk_user_email];")){
                 throw new ConstraintValueException("El mail "+usuario.getEmail()+" ya se encuentra registrado");
-            }else{
+            }else if(e.getMessage().contains("[uk_user_telefono];")){
                 throw new ConstraintValueException("El telefono "+usuario.getTelefono()+" ya se encuentra registrado");
+            }else{
+                throw new ConstraintValueException("El telefono "+usuario.getTelefono()+" y/o el mail"+usuario.getEmail()+" ya se encuentran registrados");
             }
         }
     }
