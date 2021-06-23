@@ -130,7 +130,7 @@ public class OurRequestService {
         return timeEstimate;
     }
 
-    public double calculateDistanceInMeters(double lat1, double long1, double lat2,
+    public static double calculateDistanceInMeters(double lat1, double long1, double lat2,
                                             double long2) {
 
 

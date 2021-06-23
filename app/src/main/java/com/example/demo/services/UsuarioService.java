@@ -7,6 +7,7 @@ import com.example.demo.ConstraintValueException;
 import com.example.demo.InvalidIdException;
 import com.example.demo.RequestStatus;
 import com.example.demo.models.DriverModel;
+import com.example.demo.models.ProductModel;
 import com.example.demo.models.RequestModel;
 import com.example.demo.models.UsuarioModel;
 import com.example.demo.repositories.UsuarioRepository;
@@ -25,6 +26,8 @@ public class UsuarioService {
     OurRequestService ourRequestService;
     @Autowired
     DriverService driverService;
+    @Autowired
+    ProductService productService;
 
     
     public ArrayList<UsuarioModel> obtenerUsuarios(){
@@ -73,8 +76,6 @@ public class UsuarioService {
 
     public double pagarSaldo(Long usr_id,Double toPay){
        UsuarioModel user = obtenerPorId(usr_id);
-
-
            double currentSaldo= user.getCurrentSaldo();
            user.setCurrentSaldo(currentSaldo-toPay);
            guardarUsuario(user);
@@ -83,7 +84,6 @@ public class UsuarioService {
     }
 
     public RequestModel getRequestedRideById(Long usr_id){
-        System.out.println("SERVIDE USER ID"+usr_id);
     UsuarioModel user = obtenerPorId(usr_id);
             if(user.getCurrentTripId()!=null) {
                 RequestModel requestModel = requestService.obtenerRequestPorId(user.getCurrentTripId());
@@ -98,11 +98,16 @@ public class UsuarioService {
                         driverModel.setLatitude(requestModel.getInit_pos_lat());
                         driverModel.setLongitude(requestModel.getInit_pos_long());
                     } else if (System.currentTimeMillis() - requestModel.getPickUpTime() >= timeToarrive) {
+                        ProductModel productModel = productService.obtenerPorId(driverModel.getProduct_id());
                         requestModel.setStatus(RequestStatus.DRIVER_ARRIVED_DESTINATION.toString());
                         requestModel.setTripCompletedTime(System.currentTimeMillis());
+                        double distance = OurRequestService.calculateDistanceInMeters(requestModel.getInit_pos_lat(),requestModel.getInit_pos_long(),requestModel.getDest_latitude(),requestModel.getDes_longitude());
+                        double priceToPay = distance * productModel.getCost_per_distance();
+                        user.setCurrentSaldo(user.getCurrentSaldo()+priceToPay);
                         driverModel.setLatitude(requestModel.getDest_latitude());
                         driverModel.setLongitude(requestModel.getDes_longitude());
                         driverModel.setAvailable(true);
+                        guardarUsuario(user);
                     } else {
                         requestModel.setStatus(RequestStatus.ON_TRIP.toString());
                     }

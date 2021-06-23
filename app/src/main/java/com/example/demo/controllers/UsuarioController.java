@@ -54,7 +54,6 @@ public class UsuarioController {
 
     @GetMapping("/{usr_id}/ride")
     public RequestModel getRequestedRide(@PathVariable("usr_id") Long usr_id){
-        System.out.println("ID USER "+usr_id);
         return this.usuarioService.getRequestedRideById(usr_id);
     }
 
