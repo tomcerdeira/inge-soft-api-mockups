@@ -24,7 +24,6 @@ public class DriverService {
 
             return driverRepository.save(driver);
         }catch (Exception e){
-            //TODO ver el tema de que si le mando
             throw new ConstraintValueException("La patente "+driver.getPatente_auto()+" ya se encuentra registrada");
         }
     }

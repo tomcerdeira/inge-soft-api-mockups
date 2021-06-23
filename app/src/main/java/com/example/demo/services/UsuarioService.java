@@ -3,6 +3,7 @@ package com.example.demo.services;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import com.example.demo.ConstraintValueException;
 import com.example.demo.models.UsuarioModel;
 import com.example.demo.repositories.UsuarioRepository;
 
@@ -19,7 +20,16 @@ public class UsuarioService {
     }
 
     public UsuarioModel guardarUsuario(UsuarioModel usuario){
-        return usuarioRepository.save(usuario);
+        try {
+            return usuarioRepository.save(usuario);
+        }catch(Exception e){
+            if(e.getMessage().contains("email")){
+
+                throw new ConstraintValueException("El mail "+usuario.getEmail()+" ya se encuentra registrado");
+            }else{
+                throw new ConstraintValueException("El telefono "+usuario.getTelefono()+" ya se encuentra registrado");
+            }
+        }
     }
 
     public Optional<UsuarioModel> obtenerPorId(Long id){
