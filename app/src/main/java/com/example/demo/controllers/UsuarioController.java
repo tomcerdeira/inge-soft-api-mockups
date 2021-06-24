@@ -34,7 +34,7 @@ public class UsuarioController {
 
     @GetMapping( path = "/{id}")
     public UsuarioModel obtenerUsuarioPorId(@PathVariable("id") Long id,@PathVariable Integer api_id) {
-        return this.usuarioService.obtenerPorId(id);
+        return this.usuarioService.obtenerPorId(id,api_id);
     }
 
     @GetMapping("/query")

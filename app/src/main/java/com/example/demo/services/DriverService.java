@@ -41,12 +41,12 @@ public class DriverService {
 //        }
     }
 
-    public DriverModel obtenerDriverPorId(Long id) throws InvalidIdException{
+    public DriverModel obtenerDriverPorId(Long id,Integer api_id) throws InvalidIdException{
         Optional<DriverModel> driverModel = driverRepository.findById(id);
-        if(driverModel.isPresent()){
+        if(driverModel.isPresent() && api_id.equals(driverModel.get().getApi_id())){
             return driverModel.get();
         }else{
-            throw new InvalidIdException("ID: "+id+" no se encuentra registrado en la base de datos");
+            throw new InvalidIdException("ID: "+id+" no se encuentra registrado en la base de datos de la API con ID"+api_id);
         }
     }
 

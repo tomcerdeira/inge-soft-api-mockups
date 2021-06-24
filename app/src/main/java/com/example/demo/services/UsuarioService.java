@@ -58,9 +58,9 @@ public class UsuarioService {
 
 
 
-    public UsuarioModel obtenerPorId(Long id){
+    public UsuarioModel obtenerPorId(Long id,Integer api_id){
         Optional<UsuarioModel> usuarioModel = usuarioRepository.findById(id);
-        if(usuarioModel.isPresent()){
+        if(usuarioModel.isPresent() && api_id.equals(usuarioModel.get().getApi_id())){
             return usuarioModel.get();
         }else{
             throw new InvalidIdException("UsrID: "+id+" no se encuenta registrado");
@@ -82,7 +82,7 @@ public class UsuarioService {
     }
 
     public double pagarSaldo(Long usr_id,Double toPay,Integer api_id){
-       UsuarioModel user = obtenerPorId(usr_id);
+       UsuarioModel user = obtenerPorId(usr_id,api_id);
            double currentSaldo= user.getCurrentSaldo();
            user.setCurrentSaldo(currentSaldo-toPay);
            guardarUsuario(user,api_id);
@@ -91,15 +91,15 @@ public class UsuarioService {
     }
 
     public RequestModel getRequestedRideById(Long usr_id,Integer api_id){
-    UsuarioModel user = obtenerPorId(usr_id);
+    UsuarioModel user = obtenerPorId(usr_id,api_id);
             if(user.getCurrentTripId()!=null) {
                 RequestModel requestModel = requestService.obtenerRequestPorId(user.getCurrentTripId());
                 //todo ver si esto corresponde aca (depende si hacemos que el driver se mueva o no)
-                double timeToPickUp = ourRequestService.getTimeOfPickUpEstimate(requestModel.getDriver_id(), requestModel.getInit_pos_lat(), requestModel.getInit_pos_long());
-                double timeToarrive = ourRequestService.getTimeOfArrivalEstimate(requestModel.getDriver_id(), requestModel.getInit_pos_lat(), requestModel.getInit_pos_long(), requestModel.getDest_latitude(), requestModel.getDes_longitude());
+                double timeToPickUp = ourRequestService.getTimeOfPickUpEstimate(requestModel.getDriver_id(), requestModel.getInit_pos_lat(), requestModel.getInit_pos_long(),api_id);
+                double timeToarrive = ourRequestService.getTimeOfArrivalEstimate(requestModel.getDriver_id(), requestModel.getInit_pos_lat(), requestModel.getInit_pos_long(), requestModel.getDest_latitude(), requestModel.getDes_longitude(),api_id);
                 System.out.println("Current time - requestTime: " + (System.currentTimeMillis() - requestModel.getRequestTime()) + " | timeToPickUp: " + timeToPickUp);
                 if (System.currentTimeMillis() - requestModel.getRequestTime() >= timeToPickUp) {
-                    DriverModel driverModel = driverService.obtenerDriverPorId(requestModel.getDriver_id());
+                    DriverModel driverModel = driverService.obtenerDriverPorId(requestModel.getDriver_id(),api_id);
                     if (requestModel.getPickUpTime() == null) {
                         requestModel.setStatus(RequestStatus.DRIVER_ARRIVED_INITIAL.toString());
                         driverModel.setLatitude(requestModel.getInit_pos_lat());

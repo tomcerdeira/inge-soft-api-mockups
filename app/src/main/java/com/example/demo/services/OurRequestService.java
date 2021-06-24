@@ -97,9 +97,9 @@ public class OurRequestService {
         return aux;
     }
 
-    public double getPriceEstimate(Long driverID, Double latitudeInit,Double longitudeInit,Double latitudeDest,Double longitudeDest){
+    public double getPriceEstimate(Long driverID, Double latitudeInit,Double longitudeInit,Double latitudeDest,Double longitudeDest,Integer api_id){
         double totalTripCost = 0.0;
-        DriverModel driver = driverService.obtenerDriverPorId(driverID);
+        DriverModel driver = driverService.obtenerDriverPorId(driverID,api_id);
 
             ProductModel product = productService.obtenerPorId(driver.getProduct_id());
 
@@ -113,18 +113,18 @@ public class OurRequestService {
         return totalTripCost;
     }
 
-    public long getTimeOfPickUpEstimate(Long driverID, Double latitudeInit,Double longitudeInit){
+    public long getTimeOfPickUpEstimate(Long driverID, Double latitudeInit,Double longitudeInit,Integer api_id){
         long timeEstimate = 0;
-        DriverModel driver = driverService.obtenerDriverPorId(driverID);
+        DriverModel driver = driverService.obtenerDriverPorId(driverID,api_id);
 
             Double dist = calculateDistanceInMeters(latitudeInit,longitudeInit,driver.getLatitude(),driver.getLongitude());
             timeEstimate += (dist/100)*60000;
         return timeEstimate;
     }
 
-    public long getTimeOfArrivalEstimate(Long driverID, Double latitudeInit,Double longitudeInit,Double latitudeDest,Double longitudeDest){
+    public long getTimeOfArrivalEstimate(Long driverID, Double latitudeInit,Double longitudeInit,Double latitudeDest,Double longitudeDest,Integer api_id){
         long timeEstimate = 0;
-        timeEstimate += getTimeOfPickUpEstimate(driverID, latitudeInit, longitudeInit);
+        timeEstimate += getTimeOfPickUpEstimate(driverID, latitudeInit, longitudeInit,api_id);
         Double dist = calculateDistanceInMeters(latitudeInit,longitudeInit,latitudeDest,longitudeDest);
         timeEstimate += (dist/100)*60000;
         return timeEstimate;
@@ -139,9 +139,9 @@ public class OurRequestService {
     }
 
 
-    public RequestModel setNewDrive(Long userId, Long driverId,Double latitudeInit, Double longitudeInit, Double latitudeDest, Double longitudeDest){
-        UsuarioModel user = userService.obtenerPorId(userId);
-        DriverModel driverModel = driverService.obtenerDriverPorId(driverId);
+    public RequestModel setNewDrive(Long userId, Long driverId,Double latitudeInit, Double longitudeInit, Double latitudeDest, Double longitudeDest,Integer api_id){
+        UsuarioModel user = userService.obtenerPorId(userId,api_id);
+        DriverModel driverModel = driverService.obtenerDriverPorId(driverId, user.getApi_id());
         RequestModel requestModel =  requestService.guardarRequest(new RequestModel());
         requestModel.setStatus(RequestStatus.CONFIRMING_DRIVER.toString());
             if (driverModel.isAvailable()) {
@@ -168,9 +168,9 @@ public class OurRequestService {
         RequestModel  requestModel = requestService.obtenerRequestPorId(id);
 
         if(requestModel.getStatus().equals(RequestStatus.WAITING_FOR_PICK_UP.toString())){
-            DriverModel driverModel = driverService.obtenerDriverPorId(requestModel.getDriver_id());
+            DriverModel driverModel = driverService.obtenerDriverPorId(requestModel.getDriver_id(),api_id);
             ProductModel productModel = productService.obtenerPorId(driverModel.getProduct_id());
-            UsuarioModel usuarioModel = userService.obtenerPorId(userId);
+            UsuarioModel usuarioModel = userService.obtenerPorId(userId,api_id);
             if(usuarioModel.getCurrentTripId() != id){
                 throw new UnauthorizedMethodException("No puede cancelar el viaje que no es suyo");
             }

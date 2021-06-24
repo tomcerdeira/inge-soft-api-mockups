@@ -32,7 +32,7 @@ public class DriverController {
 
     @GetMapping( path = "/{driver_id}")
     public DriverModel obtenerDriverPorId(@PathVariable("driver_id") Long id,@PathVariable Integer api_id) throws InvalidIdException{
-        return this.driverService.obtenerDriverPorId(id);
+        return this.driverService.obtenerDriverPorId(id,api_id);
     }
 
     @PostMapping("{driver_id}/start_ride")
@@ -44,7 +44,8 @@ public class DriverController {
 
 
     @DeleteMapping( path = "/{id}")
-    public String eliminarPorId(@PathVariable("id") Long id){
+    public String eliminarPorId(@PathVariable("id") Long id,@PathVariable Integer api_id){
+        DriverModel driverModel = obtenerDriverPorId(id,api_id);
         boolean ok = this.driverService.eliminarDriver(id);
         if (ok){
             return "Se eliminó el driver con id " + id;

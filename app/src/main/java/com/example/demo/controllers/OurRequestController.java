@@ -27,23 +27,23 @@ public class OurRequestController {
 
     @GetMapping("/estimatePrice")
     public double getPriceEstimateOfDriverId(@RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit,@RequestParam("longitudeInit") Double longitudeInit,@RequestParam("latitudeDest") Double latitudeDest,@RequestParam("longitudeDest") Double longitudeDest,@PathVariable Integer api_id){ //
-        return requestService.getPriceEstimate(driverId, latitudeInit,longitudeInit,latitudeDest,longitudeDest);
+        return requestService.getPriceEstimate(driverId, latitudeInit,longitudeInit,latitudeDest,longitudeDest,api_id);
     }
 
 
     @GetMapping("/estimatePickUp")
     public long getTimeEstimateOfPickUpOfDriverId(@RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit,@RequestParam("longitudeInit") Double longitudeInit,@PathVariable Integer api_id){ //
-        return requestService.getTimeOfPickUpEstimate(driverId, latitudeInit,longitudeInit);
+        return requestService.getTimeOfPickUpEstimate(driverId, latitudeInit,longitudeInit,api_id);
     }
 
     @GetMapping("/estimateArrival")
     public long getTimeEstimateOfArrivalOfDriverId(@RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit,@RequestParam("longitudeInit") Double longitudeInit,@RequestParam("latitudeDest") Double latitudeDest,@RequestParam("longitudeDest") Double longitudeDest,@PathVariable Integer api_id){ //
-        return requestService.getTimeOfArrivalEstimate(driverId, latitudeInit,longitudeInit,latitudeDest,longitudeDest);
+        return requestService.getTimeOfArrivalEstimate(driverId, latitudeInit,longitudeInit,latitudeDest,longitudeDest,api_id);
     }
 
     @PostMapping("/ride")
     public RequestModel setNewRide(@RequestParam("userId") Long userId, @RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit, @RequestParam("longitudeInit") Double longitudeInit, @RequestParam("latitudeDest") Double latitudeDest, @RequestParam("longitudeDest") Double longitudeDest,@PathVariable Integer api_id){
-        return requestService.setNewDrive(userId,driverId,latitudeInit,longitudeInit,latitudeDest,longitudeDest);
+        return requestService.setNewDrive(userId,driverId,latitudeInit,longitudeInit,latitudeDest,longitudeDest,api_id);
     }
 
     @PostMapping("{ride_id}/{user_id}/cancel_ride")
