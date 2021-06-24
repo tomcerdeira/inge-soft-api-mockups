@@ -50,10 +50,19 @@ Unix based:
 ###Listo ya tenes la API ejecutandose en el puerto 8080!
 
 
-##Aprende a usar la API
-Una vez que tenga la API corriendo, la documentación se encuentra en: http://localhost:8080/swagger-ui.html#/
 
-En las siguientes secciones se explicaran el funcionamiento de algunos metodos para facilitar su uso. No se detallara sobre metodos/parametros considerado triviales que se pueden deducir desde la documentacion provista.
+
+##Aprende a usar la API
+###Aclaracion importante:
+    Esta API permite simular tener mas de 1 servicio. Para utilizar  cada una, se debe anteponer el ID de la API que se quiere utilizar. En la documentacion provista esta claro como hacerlo
+
+####Una vez que tenga la API corriendo, la documentación se encuentra en:
+    http://localhost:8080/swagger-ui.html#/
+
+
+
+En las siguientes secciones se explicaran el funcionamiento de algunos metodos para facilitar su uso. No se detallara sobre metodos/parametros considerados triviales que se pueden deducir desde la documentacion provista.
+
 
 ###Como crear un driver?
  El mecanismo de crear es intuitivo.Solamente debe tener en cuenta que antes de crear un driver, debe tener creado el producto que este mismo va a ofrecer, para asi poder cargarle el ID en el campo correspondiente.
@@ -63,7 +72,7 @@ En las siguientes secciones se explicaran el funcionamiento de algunos metodos p
 2. Hace el request a la API usando POST /our_requests/ride con el driverId que elijas de la lista obtenida en (1) y el userId correspondiente a tu user.
 3. **Debes** hacer GET /requests/{id}, donde id es el del request que hiciste en (2), para ir verificando el estado del viaje. El conductor no te avisará cuando esté llegando.
 
-###Como estimar el costo de un viaje?
+###Como estimar el costo de un viaje?:
 1. Obtener los conductores disponibles para tomar su viaje. Debe utilizar el método GET /our_requests/avaliableDrivers.
       Ahora tenes todos los drivers que están disponible para tomar tu viaje.
       
