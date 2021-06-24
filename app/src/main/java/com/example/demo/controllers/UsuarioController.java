@@ -44,6 +44,7 @@ public class UsuarioController {
 
     @DeleteMapping( path = "/{id}")
     public String eliminarPorId(@PathVariable("id") Long id,@PathVariable Integer api_id){
+        UsuarioModel usuarioModel = obtenerUsuarioPorId(id,api_id);
         boolean ok = this.usuarioService.eliminarUsuario(id);
         if (ok){
             return "Se eliminó el usuario con id " + id;
