@@ -20,12 +20,12 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ProductModel guardarUsuario(@RequestBody ProductModel producto){
+    public ProductModel guardarProducto(@RequestBody ProductModel producto){
         return this.productService.guardarProducto(producto);
     }
 
     @GetMapping( path = "/{id}")
-    public Optional<ProductModel> obtenerProductoPorId(@PathVariable("id") Long id) {
+    public ProductModel obtenerProductoPorId(@PathVariable("id") Long id) {
         return this.productService.obtenerPorId(id);
     }
 

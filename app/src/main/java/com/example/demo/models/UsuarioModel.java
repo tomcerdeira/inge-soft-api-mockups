@@ -1,7 +1,6 @@
 package com.example.demo.models;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 
 @Entity
 @Table(name = "usuario", uniqueConstraints = {
@@ -22,7 +21,16 @@ public class UsuarioModel {
     @Column(name = "telefono")
     private Integer telefono;
     private String contrasena;
-    private String ciudad;
+    private double currentSaldo=0;
+    private Long currentTripId;
+
+    public Long getCurrentTripId() {
+        return currentTripId;
+    }
+
+    public void setCurrentTripId(Long currentTripId) {
+        this.currentTripId = currentTripId;
+    }
 
     public String getApellido() {
         return apellido;
@@ -48,14 +56,6 @@ public class UsuarioModel {
         this.contrasena = contrasena;
     }
 
-    public String getCiudad() {
-        return ciudad;
-    }
-
-    public void setCiudad(String ciudad) {
-        this.ciudad = ciudad;
-    }
-
     public Long getId() {
         return id;
     }
@@ -74,6 +74,14 @@ public class UsuarioModel {
 
     public String getEmail() {
         return email;
+    }
+
+    public double getCurrentSaldo() {
+        return currentSaldo;
+    }
+
+    public void setCurrentSaldo(double currentSaldo) {
+        this.currentSaldo = currentSaldo;
     }
 
     public void setEmail(String email) {

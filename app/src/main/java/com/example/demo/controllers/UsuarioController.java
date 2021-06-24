@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import com.example.demo.models.RequestModel;
 import com.example.demo.models.UsuarioModel;
 import com.example.demo.services.UsuarioService;
 
@@ -26,8 +27,13 @@ public class UsuarioController {
         return this.usuarioService.guardarUsuario(usuario);
     }
 
+    @PostMapping("/pay/{usr_id}")
+    public double pagarSaldo(@PathVariable("usr_id") Long usr_id,@RequestBody Double toPay){
+        return this.usuarioService.pagarSaldo(usr_id,toPay);
+    }
+
     @GetMapping( path = "/{id}")
-    public Optional<UsuarioModel> obtenerUsuarioPorId(@PathVariable("id") Long id) {
+    public UsuarioModel obtenerUsuarioPorId(@PathVariable("id") Long id) {
         return this.usuarioService.obtenerPorId(id);
     }
 
@@ -44,6 +50,12 @@ public class UsuarioController {
         }else{
             return "No pudo eliminar el usuario con id" + id;
         }
+    }
+
+    @GetMapping("/{usr_id}/ride")
+    public RequestModel getRequestedRide(@PathVariable("usr_id") Long usr_id){
+        System.out.println("ID USER "+usr_id);
+        return this.usuarioService.getRequestedRideById(usr_id);
     }
 
 }
