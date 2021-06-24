@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.models.ProductModel;
 import com.example.demo.services.ProductService;
+import io.swagger.annotations.SwaggerDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

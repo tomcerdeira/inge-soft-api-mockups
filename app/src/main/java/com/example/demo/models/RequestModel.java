@@ -18,8 +18,8 @@ public class RequestModel {
     private String status;
 
     private Long requestTime;
-    private Long pickUpTime; //TODO: falta setear cuando el conductor lo pasa a buscar
-    private Long tripCompletedTime; //TODO: falta setear cuando termina el viaje
+    private Long pickUpTime;
+    private Long tripCompletedTime;
 
     private Long driver_id;
 

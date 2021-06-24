@@ -5,6 +5,8 @@ import com.example.demo.models.DriverModel;
 import com.example.demo.models.OurRequestModel;
 import com.example.demo.models.RequestModel;
 import com.example.demo.services.OurRequestService;
+import jdk.jfr.Description;
+import jdk.jfr.SettingDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +29,7 @@ public class OurRequestController {
     public double getPriceEstimateOfDriverId(@RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit,@RequestParam("longitudeInit") Double longitudeInit,@RequestParam("latitudeDest") Double latitudeDest,@RequestParam("longitudeDest") Double longitudeDest){ //
         return requestService.getPriceEstimate(driverId, latitudeInit,longitudeInit,latitudeDest,longitudeDest);
     }
+
 
     @GetMapping("/estimatePickUp")
     public long getTimeEstimateOfPickUpOfDriverId(@RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit,@RequestParam("longitudeInit") Double longitudeInit){ //

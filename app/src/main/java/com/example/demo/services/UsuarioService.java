@@ -38,7 +38,6 @@ public class UsuarioService {
         try {
             return usuarioRepository.save(usuario);
         }catch(Exception e){
-            System.out.println(e.getMessage()); // todo borrar esta linea
             if(e.getMessage().contains("[uk_user_email];")){
                 throw new ConstraintValueException("El mail "+usuario.getEmail()+" ya se encuentra registrado");
             }else if(e.getMessage().contains("[uk_user_telefono];")){

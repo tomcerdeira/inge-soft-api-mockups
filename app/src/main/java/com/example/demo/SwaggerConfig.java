@@ -32,8 +32,8 @@ public class SwaggerConfig {
                 "Mockup Service API",
                 "Esta API se creo con el proposito de simular a la de una servicio de VTC",
                 "1.0",
-                "http://codmind.com/terms",
-                new Contact("UnitApp", "https://codmind.com", "unitapparg@gmail.com"),
+                "http://unitapp.com",
+                new Contact("UnitApp", "https://unitapp.com", "unitapparg@gmail.com"),
                 "LICENSE",
                 "LICENSE URL",
                 Collections.emptyList()
