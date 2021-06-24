@@ -35,9 +35,9 @@ public class OurRequestService {
 
     //private int botIndice = 0;
 
-    public List<DriverModel> getAvailablesDrivers(Double latitudeInit,Double longitudeInit,Double latitudeDest,Double longitudeDest){
+    public List<DriverModel> getAvailablesDrivers(Double latitudeInit,Double longitudeInit,Double latitudeDest,Double longitudeDest,Integer api_id){
 
-        List<DriverModel> driverAvailables =  driverService.obtenerConductoresLibres();
+        List<DriverModel> driverAvailables =  driverService.obtenerConductoresLibres(api_id);
         List<DriverModel> aux = new ArrayList<>();
         Double dist = calculateDistanceInMeters(latitudeInit,longitudeInit,latitudeDest,longitudeDest);
         ProductModel productModel;
@@ -62,7 +62,7 @@ public class OurRequestService {
                 botDriver.setPatente_auto("ABC");
                 botDriver.setNombre("Bot Driver "+botDriver.getId());
                 botDriver.setMarca_auto("BOTTOR");
-                driverService.guardarDriver(botDriver);
+                driverService.guardarDriver(botDriver,api_id);
                 Random r = new Random();
                 //rangeMin + (rangeMax - rangeMin) * r.nextDouble();
                 botDriver.setLatitude(latitudeInit + (0.001 + (0.009 - 0.001) * r.nextDouble()));
@@ -85,7 +85,7 @@ public class OurRequestService {
 
                 System.out.println("Patente bot "+ botDriver.getId() + ":" + botDriver.getPatente_auto());
                 productService.guardarProducto(botDriverProduct);
-                driverService.guardarDriver(botDriver);
+                driverService.guardarDriver(botDriver,api_id);
                 if(calculateDistanceInMeters(latitudeInit,longitudeInit,botDriver.getLatitude(),botDriver.getLongitude()) <500)
                 {
                     //System.out.println(calculateDistanceInMeters(latitudeInit,longitudeInit,d.getLatitude(),d.getLongitude())+" Dist");
@@ -164,7 +164,7 @@ public class OurRequestService {
         return requestModel;
     }
 
-    public void cancelRide(Long userId,Long id){
+    public void cancelRide(Long userId,Long id,Integer api_id){
         RequestModel  requestModel = requestService.obtenerRequestPorId(id);
 
         if(requestModel.getStatus().equals(RequestStatus.WAITING_FOR_PICK_UP.toString())){
@@ -180,8 +180,8 @@ public class OurRequestService {
             driverModel.setCurrentTripId(null);
             driverModel.setAvailable(true);
 
-            userService.guardarUsuario(usuarioModel);
-            driverService.guardarDriver(driverModel);
+            userService.guardarUsuario(usuarioModel,api_id);
+            driverService.guardarDriver(driverModel,api_id);
             requestService.borrarPorId(id);
         }else{
             throw new UnauthorizedMethodException("No puede cancelar el viaje a menos que este espando para ser recogido");

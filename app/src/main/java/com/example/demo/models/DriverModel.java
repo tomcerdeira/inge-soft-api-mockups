@@ -32,6 +32,15 @@ public class DriverModel {
     private Double latitude= (double)0;
     @Column(columnDefinition = "Integer default 0")
     private Double longitude=(double)0;
+    private  Integer api_id;
+
+    public Integer getApi_id() {
+        return api_id;
+    }
+
+    public void setApi_id(Integer api_id) {
+        this.api_id = api_id;
+    }
 
     public void finishTrip(){
         this.currentTripId = null;

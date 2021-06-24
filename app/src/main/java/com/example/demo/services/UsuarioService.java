@@ -30,12 +30,20 @@ public class UsuarioService {
     ProductService productService;
 
     
-    public ArrayList<UsuarioModel> obtenerUsuarios(){
-        return (ArrayList<UsuarioModel>) usuarioRepository.findAll();
+    public ArrayList<UsuarioModel> obtenerUsuarios(Integer api_id){
+        ArrayList<UsuarioModel> usuarioModels= (ArrayList<UsuarioModel>) usuarioRepository.findAll();
+        ArrayList<UsuarioModel> usuarioModels1 = new ArrayList<>();
+        for(UsuarioModel usuarioModel:usuarioModels){
+            if(api_id.equals(usuarioModel.getApi_id())){
+                usuarioModels1.add(usuarioModel);
+            }
+        }
+        return  usuarioModels1;
     }
 
-    public UsuarioModel guardarUsuario(UsuarioModel usuario){
+    public UsuarioModel guardarUsuario(UsuarioModel usuario,Integer api_id){
         try {
+            usuario.setApi_id(api_id);
             return usuarioRepository.save(usuario);
         }catch(Exception e){
             if(e.getMessage().contains("[uk_user_email];")){
@@ -73,16 +81,16 @@ public class UsuarioService {
         }
     }
 
-    public double pagarSaldo(Long usr_id,Double toPay){
+    public double pagarSaldo(Long usr_id,Double toPay,Integer api_id){
        UsuarioModel user = obtenerPorId(usr_id);
            double currentSaldo= user.getCurrentSaldo();
            user.setCurrentSaldo(currentSaldo-toPay);
-           guardarUsuario(user);
+           guardarUsuario(user,api_id);
            return toPay;
 
     }
 
-    public RequestModel getRequestedRideById(Long usr_id){
+    public RequestModel getRequestedRideById(Long usr_id,Integer api_id){
     UsuarioModel user = obtenerPorId(usr_id);
             if(user.getCurrentTripId()!=null) {
                 RequestModel requestModel = requestService.obtenerRequestPorId(user.getCurrentTripId());
@@ -106,11 +114,11 @@ public class UsuarioService {
                         driverModel.setLatitude(requestModel.getDest_latitude());
                         driverModel.setLongitude(requestModel.getDes_longitude());
                         driverModel.setAvailable(true);
-                        guardarUsuario(user);
+                        guardarUsuario(user,api_id);
                     } else {
                         requestModel.setStatus(RequestStatus.ON_TRIP.toString());
                     }
-                    driverService.guardarDriver(driverModel);
+                    driverService.guardarDriver(driverModel,api_id);
                 }
                 requestService.guardarRequest(requestModel);
                 return requestModel;

@@ -14,42 +14,42 @@ import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
-@RequestMapping("/our_requests")
+@RequestMapping("/our_requests/{api_id}")
 public class OurRequestController {
 
     @Autowired
     OurRequestService requestService;
 
     @GetMapping("/availableDrivers")
-    public List<DriverModel> availableDriver(@RequestParam("latitudeInit") Double latitudeInit,@RequestParam("longitudeInit") Double longitudeInit,@RequestParam("latitudeDest") Double latitudeDest,@RequestParam("longitudeDest") Double longitudeDest){ //
-        return requestService.getAvailablesDrivers(latitudeInit,longitudeInit,latitudeDest,longitudeDest);
+    public List<DriverModel> availableDriver(@RequestParam("latitudeInit") Double latitudeInit,@RequestParam("longitudeInit") Double longitudeInit,@RequestParam("latitudeDest") Double latitudeDest,@RequestParam("longitudeDest") Double longitudeDest,@PathVariable Integer api_id){ //
+        return requestService.getAvailablesDrivers(latitudeInit,longitudeInit,latitudeDest,longitudeDest,api_id);
     }
 
     @GetMapping("/estimatePrice")
-    public double getPriceEstimateOfDriverId(@RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit,@RequestParam("longitudeInit") Double longitudeInit,@RequestParam("latitudeDest") Double latitudeDest,@RequestParam("longitudeDest") Double longitudeDest){ //
+    public double getPriceEstimateOfDriverId(@RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit,@RequestParam("longitudeInit") Double longitudeInit,@RequestParam("latitudeDest") Double latitudeDest,@RequestParam("longitudeDest") Double longitudeDest,@PathVariable Integer api_id){ //
         return requestService.getPriceEstimate(driverId, latitudeInit,longitudeInit,latitudeDest,longitudeDest);
     }
 
 
     @GetMapping("/estimatePickUp")
-    public long getTimeEstimateOfPickUpOfDriverId(@RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit,@RequestParam("longitudeInit") Double longitudeInit){ //
+    public long getTimeEstimateOfPickUpOfDriverId(@RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit,@RequestParam("longitudeInit") Double longitudeInit,@PathVariable Integer api_id){ //
         return requestService.getTimeOfPickUpEstimate(driverId, latitudeInit,longitudeInit);
     }
 
     @GetMapping("/estimateArrival")
-    public long getTimeEstimateOfArrivalOfDriverId(@RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit,@RequestParam("longitudeInit") Double longitudeInit,@RequestParam("latitudeDest") Double latitudeDest,@RequestParam("longitudeDest") Double longitudeDest){ //
+    public long getTimeEstimateOfArrivalOfDriverId(@RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit,@RequestParam("longitudeInit") Double longitudeInit,@RequestParam("latitudeDest") Double latitudeDest,@RequestParam("longitudeDest") Double longitudeDest,@PathVariable Integer api_id){ //
         return requestService.getTimeOfArrivalEstimate(driverId, latitudeInit,longitudeInit,latitudeDest,longitudeDest);
     }
 
     @PostMapping("/ride")
-    public RequestModel setNewRide(@RequestParam("userId") Long userId, @RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit, @RequestParam("longitudeInit") Double longitudeInit, @RequestParam("latitudeDest") Double latitudeDest, @RequestParam("longitudeDest") Double longitudeDest){
+    public RequestModel setNewRide(@RequestParam("userId") Long userId, @RequestParam("driverId") Long driverId, @RequestParam("latitudeInit") Double latitudeInit, @RequestParam("longitudeInit") Double longitudeInit, @RequestParam("latitudeDest") Double latitudeDest, @RequestParam("longitudeDest") Double longitudeDest,@PathVariable Integer api_id){
         return requestService.setNewDrive(userId,driverId,latitudeInit,longitudeInit,latitudeDest,longitudeDest);
     }
 
     @PostMapping("{ride_id}/{user_id}/cancel_ride")
-    public void cancelRide(@PathVariable("user_id") Long user_id,@PathVariable("ride_id") Long ride_id){
+    public void cancelRide(@PathVariable("user_id") Long user_id,@PathVariable("ride_id") Long ride_id,@PathVariable Integer api_id){
         System.out.println("LLEGO A CANCEL"+ride_id+user_id);
-        requestService.cancelRide(user_id,ride_id);
+        requestService.cancelRide(user_id,ride_id,api_id);
     }
 
 }

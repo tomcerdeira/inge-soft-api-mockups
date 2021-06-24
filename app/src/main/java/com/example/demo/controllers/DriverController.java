@@ -15,29 +15,29 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/driver")
+@RequestMapping("/driver/{api_id}")
 public class DriverController {
     @Autowired
     DriverService  driverService;
 
     @GetMapping()
-    public ArrayList<DriverModel> obtenerTodosDriver(){
-        return driverService.obtenerDrivers();
+    public ArrayList<DriverModel> obtenerTodosDriver(@PathVariable Integer api_id){
+        return driverService.obtenerDrivers(api_id);
     }
 
     @PostMapping()
-    public DriverModel guardarDriver(@RequestBody DriverModel driver){
-            return this.driverService.guardarDriver(driver);
+    public DriverModel guardarDriver(@RequestBody DriverModel driver,@PathVariable Integer api_id){
+            return this.driverService.guardarDriver(driver,api_id);
     }
 
     @GetMapping( path = "/{driver_id}")
-    public DriverModel obtenerDriverPorId(@PathVariable("driver_id") Long id) throws InvalidIdException{
+    public DriverModel obtenerDriverPorId(@PathVariable("driver_id") Long id,@PathVariable Integer api_id) throws InvalidIdException{
         return this.driverService.obtenerDriverPorId(id);
     }
 
     @PostMapping("{driver_id}/start_ride")
-    public RequestModel startTrip(@PathVariable("driver_id") Long id){
-        DriverModel driverModel = obtenerDriverPorId(id);
+    public RequestModel startTrip(@PathVariable("driver_id") Long id,@PathVariable Integer api_id){
+        DriverModel driverModel = obtenerDriverPorId(id,api_id);
         return this.driverService.startRide(driverModel.getCurrentTripId());
     }
 

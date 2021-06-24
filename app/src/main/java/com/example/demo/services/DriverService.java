@@ -6,6 +6,7 @@ import com.example.demo.RequestStatus;
 import com.example.demo.models.DriverModel;
 
 import com.example.demo.models.RequestModel;
+import com.example.demo.models.UsuarioModel;
 import com.example.demo.repositories.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,20 @@ public class DriverService {
     @Autowired
     RequestService requestService;
 
-    public ArrayList<DriverModel> obtenerDrivers(){
-        return (ArrayList<DriverModel>) driverRepository.findAll();
+    public ArrayList<DriverModel> obtenerDrivers(Integer api_id){
+        ArrayList<DriverModel> driverModels= (ArrayList<DriverModel>) driverRepository.findAll();
+        ArrayList<DriverModel> driverModels1 = new ArrayList<>();
+        for(DriverModel driverModel:driverModels){
+            if(api_id.equals(driverModel.getApi_id())){
+                driverModels1.add(driverModel);
+            }
+        }
+        return  driverModels1;
     }
 
-    public DriverModel guardarDriver(DriverModel driver){
+    public DriverModel guardarDriver(DriverModel driver,Integer api_id){
         //try{
-
+            driver.setApi_id(api_id);
             return driverRepository.save(driver);
 //        }catch (Exception e){
 //            throw new ConstraintValueException("La patente "+driver.getPatente_auto()+" ya se encuentra registrada");
@@ -51,8 +59,8 @@ public class DriverService {
         }
     }
 
-    public ArrayList<DriverModel> obtenerConductoresLibres(){
-        ArrayList<DriverModel> drivers = obtenerDrivers();
+    public ArrayList<DriverModel> obtenerConductoresLibres(Integer api_id){
+        ArrayList<DriverModel> drivers = obtenerDrivers(api_id);
         ArrayList<DriverModel> aux = new ArrayList<>();
 
         for(DriverModel driver:drivers){

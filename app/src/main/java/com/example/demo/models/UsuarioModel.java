@@ -23,6 +23,15 @@ public class UsuarioModel {
     private String contrasena;
     private double currentSaldo=0;
     private Long currentTripId;
+    private  Integer api_id;
+
+    public Integer getApi_id() {
+        return api_id;
+    }
+
+    public void setApi_id(Integer api_id) {
+        this.api_id = api_id;
+    }
 
     public Long getCurrentTripId() {
         return currentTripId;
