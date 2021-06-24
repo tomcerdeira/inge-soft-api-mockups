@@ -9,19 +9,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/requests")
+@RequestMapping("/requests/{api_id}")
 public class RequestController {
 
     @Autowired
     RequestService requestService;
 
     @GetMapping( path = "/{id}")
-    public RequestModel obtenerRequestPorId(@PathVariable("id") Long id) {
+    public RequestModel obtenerRequestPorId(@PathVariable("id") Long id,@PathVariable Integer api_id) {
         return this.requestService.obtenerRequestPorId(id);
     }
 
     @PostMapping()
-    public RequestModel guardarRequest(RequestModel requestModel) {
+    public RequestModel guardarRequest(RequestModel requestModel,@PathVariable Integer api_id) {
         return this.requestService.guardarRequest(requestModel);
     }
 
