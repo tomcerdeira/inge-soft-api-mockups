@@ -31,7 +31,7 @@ public class ProductModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long product_id;
+    private Long id;
 
     private Integer capacity;
 
@@ -49,8 +49,13 @@ public class ProductModel {
     private String display_name;
     private String description;
 
+    public Long getId() {
+        return id;
+    }
 
-
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Integer getCapacity() {
         return capacity;
