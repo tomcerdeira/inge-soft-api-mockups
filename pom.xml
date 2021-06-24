@@ -17,7 +17,7 @@
 
 	<properties>
 		<java.version>8</java.version>
-		<maven.version>3.3.9</maven.version>
+		<maven.version>2.5.1</maven.version>
 	</properties>
 
 	<dependencies>
