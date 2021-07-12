@@ -57,7 +57,6 @@ public class ProductModel {
         this.id = id;
     }
 
-
     public Integer getCapacity() {
         return capacity;
     }
