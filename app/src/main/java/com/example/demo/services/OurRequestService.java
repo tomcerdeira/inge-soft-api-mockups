@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class OurRequestService {
@@ -38,10 +39,8 @@ public class OurRequestService {
     public List<DriverModel> getAvailablesDrivers(Double latitudeInit,Double longitudeInit,Double latitudeDest,Double longitudeDest,Integer api_id){
 
         List<DriverModel> driverAvailables =  driverService.obtenerConductoresLibres(api_id);
-        System.out.println(driverAvailables.size()+"INIT");
-        driverAvailables.stream().filter(driver ->calculateDistanceInMeters(latitudeInit,longitudeInit,driver.getLatitude(),driver.getLongitude()) <500 );
-        System.out.println(driverAvailables.size()+"FIN");
         List<DriverModel> aux = new ArrayList<>();
+
         Double dist = calculateDistanceInMeters(latitudeInit,longitudeInit,latitudeDest,longitudeDest);
         ProductModel productModel;
         for(DriverModel d:driverAvailables){
@@ -54,7 +53,6 @@ public class OurRequestService {
                     }
                     }
         }
-        System.out.println(aux.size());
         while (aux.size() < 5){
             //DriverModel botDriver = driverService.guardarDriver(new DriverModel());
                 DriverModel botDriver = new DriverModel();
@@ -63,7 +61,7 @@ public class OurRequestService {
                 botDriver.setPatente_auto("ABC");
                 botDriver.setNombre("Bot Driver "+botDriver.getId());
                 botDriver.setMarca_auto("BOTTOR");
-                driverService.guardarDriver(botDriver,api_id);
+               botDriver = driverService.guardarDriver(botDriver,api_id);
                 Random r = new Random();
                 botDriver.setLatitude(latitudeInit + (0.001 + (0.009 - 0.001) * r.nextDouble()));
                 botDriver.setLongitude(longitudeInit + (0.001 + (0.009 - 0.001) * r.nextDouble()));
