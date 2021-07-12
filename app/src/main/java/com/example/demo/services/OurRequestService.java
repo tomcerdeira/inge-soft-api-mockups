@@ -54,7 +54,7 @@ public class OurRequestService {
         if (aux.size() == 0){
             ArrayList<DriverModel> auxBotDrivers = new ArrayList<>();
             for (int i=0; i<5; i++){
-//                System.out.println("LLEGOOOO!!");
+                System.out.println("LLEGOOOO!!");
                 //DriverModel botDriver = driverService.guardarDriver(new DriverModel());
                 DriverModel botDriver = new DriverModel();
                 ProductModel botDriverProduct = productService.guardarProducto(new ProductModel());
@@ -82,8 +82,8 @@ public class OurRequestService {
                 botDriverProduct.setShort_description("Bot Driver "+botDriver.getId());
                 botDriverProduct.setDisplay_name("Bot Driver "+botDriver.getId());
                 botDriverProduct.setDescription("Bot Driver "+botDriver.getId());
-                botDriverProduct.setService_fee(10);
-//                System.out.println("Patente bot "+ botDriver.getId() + ":" + botDriver.getPatente_auto());
+
+                System.out.println("Patente bot "+ botDriver.getId() + ":" + botDriver.getPatente_auto());
                 productService.guardarProducto(botDriverProduct);
                 driverService.guardarDriver(botDriver,api_id);
                 if(calculateDistanceInMeters(latitudeInit,longitudeInit,botDriver.getLatitude(),botDriver.getLongitude()) <500)
