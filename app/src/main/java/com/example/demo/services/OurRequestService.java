@@ -38,6 +38,9 @@ public class OurRequestService {
     public List<DriverModel> getAvailablesDrivers(Double latitudeInit,Double longitudeInit,Double latitudeDest,Double longitudeDest,Integer api_id){
 
         List<DriverModel> driverAvailables =  driverService.obtenerConductoresLibres(api_id);
+        System.out.println(driverAvailables.size()+"INIT");
+        driverAvailables.stream().filter(driver ->calculateDistanceInMeters(latitudeInit,longitudeInit,driver.getLatitude(),driver.getLongitude()) <500 );
+        System.out.println(driverAvailables.size()+"FIN");
         List<DriverModel> aux = new ArrayList<>();
         Double dist = calculateDistanceInMeters(latitudeInit,longitudeInit,latitudeDest,longitudeDest);
         ProductModel productModel;
@@ -51,11 +54,9 @@ public class OurRequestService {
                     }
                     }
         }
-        if (aux.size() == 0){
-            ArrayList<DriverModel> auxBotDrivers = new ArrayList<>();
-            for (int i=0; i<5; i++){
-                System.out.println("LLEGOOOO!!");
-                //DriverModel botDriver = driverService.guardarDriver(new DriverModel());
+        System.out.println(aux.size());
+        while (aux.size() < 5){
+            //DriverModel botDriver = driverService.guardarDriver(new DriverModel());
                 DriverModel botDriver = new DriverModel();
                 ProductModel botDriverProduct = productService.guardarProducto(new ProductModel());
                 botDriver.setProduct_id(botDriverProduct.getId());
@@ -64,13 +65,11 @@ public class OurRequestService {
                 botDriver.setMarca_auto("BOTTOR");
                 driverService.guardarDriver(botDriver,api_id);
                 Random r = new Random();
-                //rangeMin + (rangeMax - rangeMin) * r.nextDouble();
                 botDriver.setLatitude(latitudeInit + (0.001 + (0.009 - 0.001) * r.nextDouble()));
                 botDriver.setLongitude(longitudeInit + (0.001 + (0.009 - 0.001) * r.nextDouble()));
                 botDriver.setPatente_auto("BOT" + botDriver.getId());
-                //TODO: ver si seteamos toda la info del conductor
-                botDriverProduct.setCapacity(4);
-                //ThreadLocalRandom.current().nextInt(min, max + 1);
+
+                botDriverProduct.setCapacity(ThreadLocalRandom.current().nextInt(2,5));
                 botDriverProduct.setCancellation_fee(ThreadLocalRandom.current().nextInt(20, 80 + 1));
                 botDriverProduct.setCost_per_minute(ThreadLocalRandom.current().nextInt(2, 12 + 1));
                 botDriverProduct.setCost_per_distance(ThreadLocalRandom.current().nextInt(20, 60 + 1));
@@ -82,17 +81,14 @@ public class OurRequestService {
                 botDriverProduct.setShort_description("Bot Driver "+botDriver.getId());
                 botDriverProduct.setDisplay_name("Bot Driver "+botDriver.getId());
                 botDriverProduct.setDescription("Bot Driver "+botDriver.getId());
-
-                System.out.println("Patente bot "+ botDriver.getId() + ":" + botDriver.getPatente_auto());
+                botDriverProduct.setService_fee(ThreadLocalRandom.current().nextInt(10, 50 + 1));
                 productService.guardarProducto(botDriverProduct);
                 driverService.guardarDriver(botDriver,api_id);
                 if(calculateDistanceInMeters(latitudeInit,longitudeInit,botDriver.getLatitude(),botDriver.getLongitude()) <500)
                 {
-                    //System.out.println(calculateDistanceInMeters(latitudeInit,longitudeInit,d.getLatitude(),d.getLongitude())+" Dist");
                     aux.add(botDriver);
                 }
 
-            }
         }
         return aux;
     }
