@@ -5,7 +5,7 @@ import com.example.demo.models.*;
 import com.example.demo.repositories.DriverRepository;
 import com.example.demo.repositories.OurRequestRepository;
 import com.example.demo.repositories.RequestRepository;
-import jdk.internal.joptsimple.internal.Strings;
+
 import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,7 +50,7 @@ public class OurRequestService {
         }else {
             patenteNumero++;
         }
-        return patente.concat(String.format("%3d",patenteNumero));
+        return patente.concat(String.format("%03d",patenteNumero));
     }
 
 
