@@ -42,6 +42,8 @@ public class OurRequestService {
     private Integer telephone = 1543512000;
     private  String patente = "AAA";
     private Integer patenteNumero = 0;
+    private boolean initialized =false;
+    private Map<String,List<String>> cars = new HashMap<>();
 
     private String getPatente(){
         if(patenteNumero == 999) {
@@ -54,7 +56,60 @@ public class OurRequestService {
     }
 
 
+
     public List<DriverModel> getAvailablesDrivers(Double latitudeInit,Double longitudeInit,Double latitudeDest,Double longitudeDest,Integer api_id){
+    if(!initialized) {
+        for (String carb : carBrandsList) {
+            cars.putIfAbsent(carb, new ArrayList<>());
+            switch (carb) {
+                case "Ford": {
+                    cars.get("Ford").addAll(Arrays.asList("Mondeo", "Fiesta", "Focus", "Ka", "Ka+", "Ranger"));
+                    break;
+                }
+                case "Renault": {
+                    cars.get("Reault").addAll(Arrays.asList("Clio", "Megan", "Stepway", "Duster", "KWID", "Sandero", "Logan", "Kangoo"));
+                    break;
+                }
+                case "Nissan": {
+                    cars.get("Nissan").addAll(Arrays.asList("Versa", "Kicks", "Sentra"));
+                    break;
+                }
+                case "Fiat": {
+                    cars.get("Fiat").addAll(Arrays.asList("Argo", "Uno", "Palio", "Mobi", "Cronos", "Siena"));
+                    break;
+                }
+                case "Toyota": {
+                    cars.get("Toyota").addAll(Arrays.asList("Corolla", "Etios", "Yaris", "Prius", "Innova"));
+                    break;
+                }
+                case "Chevrolet": {
+                    cars.get("Chevrolet").addAll(Arrays.asList("Corsa", "Spin", "Cruze", "Cruze 5", "Onix"));
+                    break;
+                }
+                case "VW": {
+                    cars.get("VW").addAll(Arrays.asList("Gol", "Golf", "T-Cross", "Vento", "Tiguan", "Polo"));
+                    break;
+                }
+                case "Peugeot": {
+                    cars.get("Peugeot").addAll(Arrays.asList("208", "308", "2008"));
+                    break;
+                }
+                case "Citroen": {
+                    cars.get("Citroen").addAll(Arrays.asList("C4", "C3", "Berlingo"));
+                    break;
+                }
+                case "Honda": {
+                    cars.get("Honda").addAll(Arrays.asList("Civic", "CR-V", "HR-V", "Fit"));
+                    break;
+                }
+                case "Hyundai": {
+                    cars.get("Hyundai").addAll(Arrays.asList("Santa Fe", "i10"));
+                    break;
+                }
+            }
+        }
+        initialized = true;
+    }
 
         List<DriverModel> driverAvailables =  driverService.obtenerConductoresLibres(api_id);
         List<DriverModel> aux = new ArrayList<>();
@@ -84,6 +139,7 @@ public class OurRequestService {
                botDriver = driverService.guardarDriver(botDriver,api_id);
                 Random r = new Random();
                 botDriver.setMarca_auto(carBrandsList.get(ThreadLocalRandom.current().nextInt(0,carBrandsList.size()-1)));
+                botDriver.setModelo_auto(cars.get(botDriver.getMarca_auto()).get(ThreadLocalRandom.current().nextInt(0,cars.get(botDriver.getMarca_auto()).size()-1))); //
                 botDriver.setLatitude(latitudeInit + (0.001 + (0.009 - 0.001) * r.nextDouble()));
                 botDriver.setLongitude(longitudeInit + (0.001 + (0.009 - 0.001) * r.nextDouble()));
                 botDriver.setPatente_auto(getPatente());
@@ -100,6 +156,7 @@ public class OurRequestService {
                 botDriverProduct.setShared(false);
                 botDriver.setNombre(namesList.get(ThreadLocalRandom.current().nextInt(0,namesList.size()-1)));
                 botDriver.setApellido(lastNamesList.get(ThreadLocalRandom.current().nextInt(0,carBrandsList.size()-1)));
+
                 botDriverProduct.setShort_description("Bot Product "+botDriver.getId());
                 botDriverProduct.setDisplay_name("Bot Product "+botDriver.getId());
                 botDriverProduct.setDescription("Bot Product "+botDriver.getId());
