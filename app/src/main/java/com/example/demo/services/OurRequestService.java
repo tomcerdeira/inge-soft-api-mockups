@@ -67,7 +67,7 @@ public class OurRequestService {
                 botDriver.setLongitude(longitudeInit + (0.001 + (0.009 - 0.001) * r.nextDouble()));
                 botDriver.setPatente_auto("BOT" + botDriver.getId());
 
-                botDriverProduct.setCapacity(ThreadLocalRandom.current().nextInt(2,5));
+                botDriverProduct.setCapacity(ThreadLocalRandom.current().nextInt(2,4));
                 botDriverProduct.setCancellation_fee(ThreadLocalRandom.current().nextInt(20, 80 + 1));
                 botDriverProduct.setCost_per_minute(ThreadLocalRandom.current().nextInt(2, 12 + 1));
                 botDriverProduct.setCost_per_distance(ThreadLocalRandom.current().nextInt(20, 60 + 1));
@@ -76,9 +76,9 @@ public class OurRequestService {
                 botDriverProduct.setCash_enabled(true);
                 botDriverProduct.setShared(false);
                 botDriver.setNombre("Bot Driver "+botDriver.getId());
-                botDriverProduct.setShort_description("Bot Driver "+botDriver.getId());
-                botDriverProduct.setDisplay_name("Bot Driver "+botDriver.getId());
-                botDriverProduct.setDescription("Bot Driver "+botDriver.getId());
+                botDriverProduct.setShort_description("Bot Driver "+botDriver.getId() + "Product");
+                botDriverProduct.setDisplay_name("Bot Driver "+botDriver.getId()+ "Product");
+                botDriverProduct.setDescription("Bot Driver "+botDriver.getId()+ "Product");
                 botDriverProduct.setService_fee(ThreadLocalRandom.current().nextInt(10, 50 + 1));
                 productService.guardarProducto(botDriverProduct);
                 driverService.guardarDriver(botDriver,api_id);
