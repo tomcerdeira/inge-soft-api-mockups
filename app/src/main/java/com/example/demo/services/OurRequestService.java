@@ -90,7 +90,7 @@ public class OurRequestService {
                 botDriver.setTelefono(telephone++);
                 botDriver.setRate(ThreadLocalRandom.current().nextInt(0,5));
 
-                botDriverProduct.setCapacity(ThreadLocalRandom.current().nextInt(2,5));
+                botDriverProduct.setCapacity(ThreadLocalRandom.current().nextInt(2,4));
                 botDriverProduct.setCancellation_fee(ThreadLocalRandom.current().nextInt(20, 80 + 1));
                 botDriverProduct.setCost_per_minute(ThreadLocalRandom.current().nextInt(2, 12 + 1));
                 botDriverProduct.setCost_per_distance(ThreadLocalRandom.current().nextInt(20, 60 + 1));
