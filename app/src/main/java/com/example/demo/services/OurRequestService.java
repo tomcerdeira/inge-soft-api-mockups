@@ -5,17 +5,16 @@ import com.example.demo.models.*;
 import com.example.demo.repositories.DriverRepository;
 import com.example.demo.repositories.OurRequestRepository;
 import com.example.demo.repositories.RequestRepository;
+import jdk.internal.joptsimple.internal.Strings;
 import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.text.html.Option;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,12 +33,32 @@ public class OurRequestService {
     @Autowired
     UsuarioService userService;
 
-    //private int botIndice = 0;
+    private String [] names = {"Matias", "Santiago", "Tomas", "Ana", "Martina", "Rodrigo", "Pablo", "Enrique", "Esteban", "Federico", "Sergio", "Raul", "Roberto", "Juan", "Agustin", "Victoria", "Alejandra", "Marcela", "Leticia", "Paula", "Daniel", "Gustavo", "Mariano", "Brain"};
+    private List<String> namesList = Arrays.asList(names);
+    private String [] lastNames = {"Perez", "Garcia", "Lin", "Rodriguez", "Ramirez", "Martinez", "Ramele", "Flores", "Alaise", "Ragalli", "Regueira", "Falbo", "Reggi", "Pulido", "Luccetti", "Ferreira", "Mendive", "Di Napoli", "Bridger", "Augustoni", "Boskis", "Diesel", "Nahin", "Fara", "Lopez", "Mora", "Roma", "Slaguero"};
+    private List<String> lastNamesList = Arrays.asList(lastNames);
+    private String [] carBrands = {"Ford", "Renault", "Nissan", "Fiat", "Toyota", "Chevrolet", "VW", "Peugeot", "Citroen", "Honda", "Hyundai"};
+    private List<String> carBrandsList = Arrays.asList(carBrands);
+    private Integer telephone = 1543512000;
+    private  String patente = "AAA";
+    private Integer patenteNumero = 0;
+
+    private String getPatente(){
+        if(patenteNumero == 999) {
+            patente = "AAB";
+            patenteNumero = 0;
+        }else {
+            patenteNumero++;
+        }
+        return patente.concat(String.format("%3d",patenteNumero));
+    }
+
 
     public List<DriverModel> getAvailablesDrivers(Double latitudeInit,Double longitudeInit,Double latitudeDest,Double longitudeDest,Integer api_id){
 
         List<DriverModel> driverAvailables =  driverService.obtenerConductoresLibres(api_id);
         List<DriverModel> aux = new ArrayList<>();
+
 
         Double dist = calculateDistanceInMeters(latitudeInit,longitudeInit,latitudeDest,longitudeDest);
         ProductModel productModel;
@@ -59,13 +78,17 @@ public class OurRequestService {
                 ProductModel botDriverProduct = productService.guardarProducto(new ProductModel());
                 botDriver.setProduct_id(botDriverProduct.getId());
                 botDriver.setPatente_auto("ABC");
+
                 botDriver.setNombre("Bot Driver "+botDriver.getId());
                 botDriver.setMarca_auto("BOTTOR");
                botDriver = driverService.guardarDriver(botDriver,api_id);
                 Random r = new Random();
+                botDriver.setMarca_auto(carBrandsList.get(ThreadLocalRandom.current().nextInt(0,carBrandsList.size()-1)));
                 botDriver.setLatitude(latitudeInit + (0.001 + (0.009 - 0.001) * r.nextDouble()));
                 botDriver.setLongitude(longitudeInit + (0.001 + (0.009 - 0.001) * r.nextDouble()));
-                botDriver.setPatente_auto("BOT" + botDriver.getId());
+                botDriver.setPatente_auto(getPatente());
+                botDriver.setTelefono(telephone++);
+                botDriver.setRate(ThreadLocalRandom.current().nextInt(0,5));
 
                 botDriverProduct.setCapacity(ThreadLocalRandom.current().nextInt(2,5));
                 botDriverProduct.setCancellation_fee(ThreadLocalRandom.current().nextInt(20, 80 + 1));
@@ -75,10 +98,11 @@ public class OurRequestService {
                 botDriverProduct.setCurrency_code("ARS");
                 botDriverProduct.setCash_enabled(true);
                 botDriverProduct.setShared(false);
-                botDriver.setNombre("Bot Driver "+botDriver.getId());
-                botDriverProduct.setShort_description("Bot Driver "+botDriver.getId());
-                botDriverProduct.setDisplay_name("Bot Driver "+botDriver.getId());
-                botDriverProduct.setDescription("Bot Driver "+botDriver.getId());
+                botDriver.setNombre(namesList.get(ThreadLocalRandom.current().nextInt(0,namesList.size()-1)));
+                botDriver.setApellido(lastNamesList.get(ThreadLocalRandom.current().nextInt(0,carBrandsList.size()-1)));
+                botDriverProduct.setShort_description("Bot Product "+botDriver.getId());
+                botDriverProduct.setDisplay_name("Bot Product "+botDriver.getId());
+                botDriverProduct.setDescription("Bot Product "+botDriver.getId());
                 botDriverProduct.setService_fee(ThreadLocalRandom.current().nextInt(10, 50 + 1));
                 productService.guardarProducto(botDriverProduct);
                 driverService.guardarDriver(botDriver,api_id);
