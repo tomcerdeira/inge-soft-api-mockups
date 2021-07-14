@@ -67,7 +67,7 @@ public class OurRequestService {
                     break;
                 }
                 case "Renault": {
-                    cars.get("Reault").addAll(Arrays.asList("Clio", "Megan", "Stepway", "Duster", "KWID", "Sandero", "Logan", "Kangoo"));
+                    cars.get("Renault").addAll(Arrays.asList("Clio", "Megan", "Stepway", "Duster", "KWID", "Sandero", "Logan", "Kangoo"));
                     break;
                 }
                 case "Nissan": {
