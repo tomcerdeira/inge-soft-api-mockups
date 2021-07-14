@@ -9,28 +9,21 @@ public class DriverModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Long id;
-    @Column(unique = false, nullable = false)
     private String nombre;
-    @Column(unique = false, nullable = false)
     private Long product_id;
 
     private boolean isAvailable = true;
     private Long currentTripId;
 
     private String apellido;
-    @Column(unique = false, nullable = false)
     private String marca_auto;
     private String modelo_auto;
-    @Column(unique = true, nullable = false)
     private String patente_auto;
     private String imagen_auto;
     private String imagen_conductor;
     private Integer telefono;
-    @Column(columnDefinition = "Integer default 0")
     private Integer rate=0;
-    @Column(columnDefinition = "Integer default 0")
     private Double latitude= (double)0;
-    @Column(columnDefinition = "Integer default 0")
     private Double longitude=(double)0;
     private  Integer api_id;
 
@@ -165,5 +158,18 @@ public class DriverModel {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    @Override
+    public String toString() {
+        return "DriverModel{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", isAvailable=" + isAvailable +
+                ", apellido='" + apellido + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", api_id=" + api_id +
+                '}';
     }
 }

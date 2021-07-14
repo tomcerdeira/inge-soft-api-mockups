@@ -46,10 +46,13 @@ public class OurRequestService {
     private Map<String,List<String>> cars = new HashMap<>();
 
     private String getPatente(){
-        if(patenteNumero == 999) {
+        if(patenteNumero == 999 && patente.equals("AAA")) {
             patente = "AAB";
             patenteNumero = 0;
-        }else {
+        }else if(patenteNumero == 999 && patente.equals("AAB")){
+            patente = "AAC";
+            patenteNumero = 0;
+        }else{
             patenteNumero++;
         }
         return patente.concat(String.format("%03d",patenteNumero));
@@ -117,17 +120,18 @@ public class OurRequestService {
 
         Double dist = calculateDistanceInMeters(latitudeInit,longitudeInit,latitudeDest,longitudeDest);
         ProductModel productModel;
-        for(DriverModel d:driverAvailables){
+        for(DriverModel d : driverAvailables){
             productModel = productService.obtenerPorId(d.getProduct_id());
                 if(productModel.getMinimum()<dist){
-                    if(calculateDistanceInMeters(latitudeInit,longitudeInit,d.getLatitude(),d.getLongitude()) <500)
+                    if(calculateDistanceInMeters(latitudeInit,longitudeInit,d.getLatitude(),d.getLongitude()) <= 500)
                     {
                         //System.out.println(calculateDistanceInMeters(latitudeInit,longitudeInit,d.getLatitude(),d.getLongitude())+" Dist");
                         aux.add(d);
                     }
-                    }
+                }
         }
-        while (aux.size() < 5){
+        int randomCant = ThreadLocalRandom.current().nextInt(1,5);
+        while (aux.size() < randomCant){
             //DriverModel botDriver = driverService.guardarDriver(new DriverModel());
                 DriverModel botDriver = new DriverModel();
                 ProductModel botDriverProduct = productService.guardarProducto(new ProductModel());
@@ -140,8 +144,14 @@ public class OurRequestService {
                 Random r = new Random();
                 botDriver.setMarca_auto(carBrandsList.get(ThreadLocalRandom.current().nextInt(0,carBrandsList.size()-1)));
                 botDriver.setModelo_auto(cars.get(botDriver.getMarca_auto()).get(ThreadLocalRandom.current().nextInt(0,cars.get(botDriver.getMarca_auto()).size()-1))); //
-                botDriver.setLatitude(latitudeInit + (0.001 + (0.009 - 0.001) * r.nextDouble()));
-                botDriver.setLongitude(longitudeInit + (0.001 + (0.009 - 0.001) * r.nextDouble()));
+//                botDriver.setLatitude(latitudeInit + (0.001 + (0.009 - 0.001) * r.nextDouble()));
+//                botDriver.setLongitude(longitudeInit + (0.001 + (0.009 - 0.001) * r.nextDouble()));
+                botDriver.setLatitude(latitudeInit + ThreadLocalRandom.current().nextDouble(0.001, 0.015));
+                botDriver.setLongitude(longitudeInit + ThreadLocalRandom.current().nextDouble(0.001, 0.015));
+                while(calculateDistanceInMeters(latitudeInit,longitudeInit,botDriver.getLatitude(),botDriver.getLongitude()) > 500){
+                    botDriver.setLatitude(latitudeInit + ThreadLocalRandom.current().nextDouble(0.001, 0.015));
+                    botDriver.setLongitude(longitudeInit + ThreadLocalRandom.current().nextDouble(0.001, 0.015));
+                }
                 botDriver.setPatente_auto(getPatente());
                 botDriver.setTelefono(telephone++);
                 botDriver.setRate(ThreadLocalRandom.current().nextInt(0,5));
@@ -163,10 +173,8 @@ public class OurRequestService {
                 botDriverProduct.setService_fee(ThreadLocalRandom.current().nextInt(10, 50 + 1));
                 productService.guardarProducto(botDriverProduct);
                 driverService.guardarDriver(botDriver,api_id);
-                if(calculateDistanceInMeters(latitudeInit,longitudeInit,botDriver.getLatitude(),botDriver.getLongitude()) <500)
-                {
-                    aux.add(botDriver);
-                }
+
+                aux.add(botDriver);
 
         }
         return aux;
