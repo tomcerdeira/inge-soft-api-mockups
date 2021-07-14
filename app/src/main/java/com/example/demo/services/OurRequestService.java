@@ -186,7 +186,7 @@ public class OurRequestService {
 
             ProductModel product = productService.obtenerPorId(driver.getProduct_id());
 
-                Double dist = calculateDistanceInMeters(latitudeInit,longitudeInit,latitudeDest,longitudeDest);
+                Double dist = calculateDistanceInMeters(latitudeInit,longitudeInit,latitudeDest,longitudeDest)/100;
                 totalTripCost += product.getService_fee();
                 //TODO: ver si agregamos el costPerMinute
                 totalTripCost += dist*product.getCost_per_distance();
