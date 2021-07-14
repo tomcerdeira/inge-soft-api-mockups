@@ -21,7 +21,7 @@ public class DriverModel {
     @Column(unique = false, nullable = false)
     private String marca_auto;
     private String modelo_auto;
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String patente_auto;
     private String imagen_auto;
     private String imagen_conductor;
