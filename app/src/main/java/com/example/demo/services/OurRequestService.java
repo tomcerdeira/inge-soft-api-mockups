@@ -49,7 +49,10 @@ public class OurRequestService {
         if(patenteNumero == 999) {
             patente = "AAB";
             patenteNumero = 0;
-        }else {
+        }else if(patenteNumero == 999 && patente.equals("AAB")){
+            patente = "AAC";
+            patenteNumero = 0;
+        }else{
             patenteNumero++;
         }
         return patente.concat(String.format("%03d",patenteNumero));
@@ -140,8 +143,10 @@ public class OurRequestService {
                 Random r = new Random();
                 botDriver.setMarca_auto(carBrandsList.get(ThreadLocalRandom.current().nextInt(0,carBrandsList.size()-1)));
                 botDriver.setModelo_auto(cars.get(botDriver.getMarca_auto()).get(ThreadLocalRandom.current().nextInt(0,cars.get(botDriver.getMarca_auto()).size()-1))); //
-                botDriver.setLatitude(latitudeInit + (0.001 + (0.009 - 0.001) * r.nextDouble()));
-                botDriver.setLongitude(longitudeInit + (0.001 + (0.009 - 0.001) * r.nextDouble()));
+//                botDriver.setLatitude(latitudeInit + (0.001 + (0.009 - 0.001) * r.nextDouble()));
+//                botDriver.setLongitude(longitudeInit + (0.001 + (0.009 - 0.001) * r.nextDouble()));
+                botDriver.setLatitude(latitudeInit + ThreadLocalRandom.current().nextDouble(0.001, 0.015));
+                botDriver.setLongitude(longitudeInit + ThreadLocalRandom.current().nextDouble(0.001, 0.015));
                 botDriver.setPatente_auto(getPatente());
                 botDriver.setTelefono(telephone++);
                 botDriver.setRate(ThreadLocalRandom.current().nextInt(0,5));
