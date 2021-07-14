@@ -28,9 +28,7 @@ public class DriverModel {
     private Integer telefono;
     @Column(columnDefinition = "Integer default 0")
     private Integer rate=0;
-    @Column(columnDefinition = "Integer default 0")
     private Double latitude= (double)0;
-    @Column(columnDefinition = "Integer default 0")
     private Double longitude=(double)0;
     private  Integer api_id;
 
@@ -165,5 +163,18 @@ public class DriverModel {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    @Override
+    public String toString() {
+        return "DriverModel{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", isAvailable=" + isAvailable +
+                ", apellido='" + apellido + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", api_id=" + api_id +
+                '}';
     }
 }
