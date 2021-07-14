@@ -46,7 +46,7 @@ public class OurRequestService {
     private Map<String,List<String>> cars = new HashMap<>();
 
     private String getPatente(){
-        if(patenteNumero == 999) {
+        if(patenteNumero == 999 && patente.equals("AAA")) {
             patente = "AAB";
             patenteNumero = 0;
         }else if(patenteNumero == 999 && patente.equals("AAB")){
